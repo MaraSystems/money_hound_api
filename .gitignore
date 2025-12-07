@@ -1,0 +1,12 @@
+__pycache__
+.venv
+.env
+.vscode
+logs
+secrets
+datasets
+uploads
+notebooks
+models
+src
+tests

@@ -1,0 +1,82 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    restart: always
+    command: mongod --quiet --logpath /dev/null
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7.2.4-alpine
+    container_name: redis
+    restart: always
+    command: ["redis-server", "--appendonly", "yes", "--loglevel", "warning"]
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - redis_data:/data
+
+  queue:
+    container_name: queue
+    build: .
+    env_file:
+      - .env
+    environment:
+      MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
+      REDIS_URL: redis://redis:6379
+    command: celery -A src.config.queue worker --loglevel=warning
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - redis
+
+  schedule:
+    container_name: schedule
+    build: .
+    env_file:
+      - .env
+    environment:
+      MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
+      REDIS_URL: redis://redis:6379
+    command: celery -A src.config.queue beat --loglevel=warning
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - queue
+
+  flower:
+    container_name: flower
+    build: .
+    env_file:
+      - .env
+    environment:
+      MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
+      REDIS_URL: redis://redis:6379
+    command: celery -A src.config.queue worker --port=5555 --loglevel=warning
+    ports:
+      - 5556:5555
+    depends_on:
+      - schedule
+
+volumes:
+  mongo_data:
+  redis_data:
+  api_data:

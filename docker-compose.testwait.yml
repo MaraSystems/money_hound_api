@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    restart: always
+    command: mongod --quiet --logpath /dev/null
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7.2.4-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes", "--loglevel", "warning"]
+    volumes:
+      - redis_data:/data
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ptw src/ tests/ --runner "pytest -v -s --disable-warnings" --onfail ignore
+    env_file:
+      - .env
+    environment:
+      ENV: test
+      MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./src:/app/src
+      - api_data:/app/data
+
+volumes:
+  mongo_data:
+  redis_data:
+  api_data:
+  

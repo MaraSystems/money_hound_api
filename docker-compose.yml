@@ -1,0 +1,90 @@
+services:
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      .env  
+    environment:
+      MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./src:/app/src
+      - api_data:/app/data
+
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    restart: always
+    command: mongod --quiet --logpath /dev/null
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7.2.4-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes", "--loglevel", "warning"]
+    volumes:
+      - redis_data:/data
+
+  queue:
+    container_name: queue
+    build: .
+    env_file:
+      - .env
+    environment:
+      MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
+      REDIS_URL: redis://redis:6379
+    command: celery -A src.config.queue worker --loglevel=warning
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - api
+
+  schedule:
+    container_name: schedule
+    build: .
+    env_file:
+      - .env
+    environment:
+      MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
+      REDIS_URL: redis://redis:6379
+    command: celery -A src.config.queue beat --loglevel=warning
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - queue
+
+  flower:
+    container_name: flower
+    build: .
+    env_file:
+      - .env
+    environment:
+      MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
+      REDIS_URL: redis://redis:6379
+    command: celery -A src.config.queue worker --port=5555 --loglevel=warning
+    ports:
+      - 5556:5555
+    depends_on:
+      - schedule
+
+volumes:
+  mongo_data:
+  redis_data:
+  api_data:
