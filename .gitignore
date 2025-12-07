@@ -9,6 +9,4 @@ uploads
 notebooks
 models
 src/domains
-src/lib
-src/middlewares
 tests
