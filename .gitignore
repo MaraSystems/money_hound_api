@@ -8,5 +8,9 @@ datasets
 uploads
 notebooks
 models
-src
+src/domains
+src/lib
+src/agents
+src/middlewares
+src/graphs
 tests
