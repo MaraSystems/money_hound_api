@@ -8,5 +8,4 @@ datasets
 uploads
 notebooks
 models
-src/domains
 tests
