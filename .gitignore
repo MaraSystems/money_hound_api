@@ -10,7 +10,5 @@ notebooks
 models
 src/domains
 src/lib
-src/agents
 src/middlewares
-src/graphs
 tests
