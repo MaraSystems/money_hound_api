@@ -61,27 +61,6 @@ def remove_outliers(df: pd.DataFrame, columns: str, n = 1.5) -> pd.DataFrame:
     return df
 
 
-def get_cashflow(df: pd.DataFrame, group):
-    """
-        Get the cashflow with respect to the provided group
-
-        @params group: the feature to group 
-    """
-    
-    # Find groups with the highest volumn of transacionts
-    cash_flow = df.groupby([group, 'type'])['amount'].sum().sort_values(ascending=False).to_frame().reset_index()
-
-    # Get the netflow for each group
-    cash_flow_pivot = cash_flow.pivot_table(index=group, columns='type', values='amount', aggfunc='sum').reset_index()
-    cash_flow_pivot['NETFLOW'] = cash_flow_pivot['CREDIT'] - cash_flow_pivot['DEBIT']
-
-    # Add the netflow for each group
-    for netflow in cash_flow_pivot[[group, 'NETFLOW']].itertuples(index=False):
-        cash_flow = pd.concat([cash_flow, pd.DataFrame({group: [netflow[0]], 'type': 'NETFLOW', 'amount': [netflow.NETFLOW]})], ignore_index=True)
-
-    return cash_flow
-
-
 def plot_cashflow(df: pd.DataFrame, columns):
     """
         Plot the cashflow with respect to the provided groups

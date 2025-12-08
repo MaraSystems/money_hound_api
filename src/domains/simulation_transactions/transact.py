@@ -32,6 +32,7 @@ async def debit_account(holder_account: SimulationAccount, related_account: Simu
     )
 
     analyzed = await analyze_transaction(transaction, db)
+    print(analyzed)
     if analyzed['fraud']:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Unusual Transaction Detected, Fraud Score: {analyzed['fraud_score']}")
 

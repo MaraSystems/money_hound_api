@@ -1,10 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import IsolationForest
-from sklearn.preprocessing import RobustScaler, RobustScaler
 
-from .tracker import hound, distance
-from src.lib.analytics import analyst
+from .tracker import distance
 
 
 def encoder(df, features):
@@ -25,6 +22,27 @@ def encoder(df, features):
 def count_related(df: pd.DataFrame, transaction, target, feature):
     # Count the frequency of relations between target and feature
     return len(df[(df[target] == transaction[target]) & (df[feature] == transaction[feature])])
+
+
+def get_cashflow(df: pd.DataFrame, group):
+    """
+        Get the cashflow with respect to the provided group
+
+        @params group: the feature to group 
+    """
+    
+    # Find groups with the highest volumn of transacionts
+    cash_flow = df.groupby([group, 'type'])['amount'].sum().sort_values(ascending=False).to_frame().reset_index()
+
+    # Get the netflow for each group
+    cash_flow_pivot = cash_flow.pivot_table(index=group, columns='type', values='amount', aggfunc='sum').reset_index()
+    cash_flow_pivot['NETFLOW'] = cash_flow_pivot['CREDIT'] - cash_flow_pivot['DEBIT']
+
+    # Add the netflow for each group
+    for netflow in cash_flow_pivot[[group, 'NETFLOW']].itertuples(index=False):
+        cash_flow = pd.concat([cash_flow, pd.DataFrame({group: [netflow[0]], 'type': 'NETFLOW', 'amount': [netflow.NETFLOW]})], ignore_index=True)
+
+    return cash_flow
 
 
 def bound_relation(df: pd.DataFrame, transaction, target, feature):
@@ -113,10 +131,22 @@ def distance_from_last(df: pd.DataFrame, transaction, target):
 
 def distance_from_home(df: pd.DataFrame, transaction, target):
     # Get the distance from home of user
-    home_geo = (transaction['holder_latitude'], transaction['holder_longitude'])
+    home_geo = (transaction['central_latitude'], transaction['central_longitude'])
     current_geo = (transaction['latitude'], transaction['longitude'])
 
     return distance(*home_geo, *current_geo)
+
+
+def central_location(df: pd.DataFrame, transaction, target):
+    # Get the mean location of the target
+    transaction_list = df[df[target] == transaction[target]]
+    if transaction_list.empty:
+        return (transaction['latitude'], transaction['longitude'])
+    
+    mean_lat = transaction_list['latitude'].mean()
+    mean_lon = transaction_list['longitude'].mean()
+
+    return (mean_lat, mean_lon)
 
 
 def get_bound_relations_frequency(df: pd.DataFrame, target, features):
@@ -192,107 +222,4 @@ def get_count_relations_frequency(df: pd.DataFrame, target, features):
         df[history_col] = has_history[history_col]
 
     return df
-
-
-def anomalize(df: pd.DataFrame, name, columns=[]):
-    """
-        Flag and score anomalies
-
-        @param df: The dataframe to use
-        @param name: The name of the anomaly
-        @param columns: The columns to check for anomalies
-
-        returns pd.DataFrame
-    """
-
-    # Copy the data
-    df = df.copy()
-    columns = df.columns if len(columns) == 0 else columns
-
-    # Extract the required columns
-    data = df[columns]
-
-    # Initialize IsolationForest and fit the data
-    model_IF = IsolationForest(random_state=42)
-    model_IF.fit(data)
-
-    # Flag and Score anamalies
-    scores = model_IF.decision_function(data)
-    flags = model_IF.predict(data)
     
-    # Normalize the flag and score
-    anomaly = [True if x == -1 else False for x in flags]
-    anomaly_scores = (scores.max() - scores) / (scores.max() - scores.min())
-
-    # Save the flag and score
-    df[f'{name}_score'] = anomaly_scores
-    df[name] = anomaly
-    return df
-    
-
-def get_bounds(df: pd.DataFrame):
-    bounds = [
-        # Has user ever transacted around this hour
-        { 'name': 'hour', 'bound': lambda x: (x-1, x+1) }, 
-
-        # Has user ever had balance around this balance
-        { 'name': 'balance', 'bound': lambda x: (x*.5, x*1.5) }, 
-
-        # Has user ever made a transaction around this amount
-        { 'name': 'amount', 'bound': lambda x: (x*.5, x*1.5) },
-        
-        # Has user balance ever jumped like this before
-        { 'name': 'balance_jump', 'bound': lambda x: (x * 0.5, x * 1.5) },
-
-        # Relative balance jump rate (percentage-like scaling)
-        { 'name': 'balance_jump_rate', 'bound': lambda x: (x - 0.2, x + 0.2) },
-        { 'name': 'balance_jump_rate_absolute', 'bound': lambda x: (x - 0.2, x + 0.2) }
-    ]
-
-    return get_bound_relations_frequency(df, 'holder', bounds)
-
-
-def get_holder_occurance(df: pd.DataFrame):
-    # Get the occurance of the following features with the account holder
-    occurances = [
-        { 'name': 'reported', 'value': True },
-        { 'name': 'category', 'value': 'REVERSAL' },
-        { 'name': 'drained_balance', 'value': True },
-        { 'name': 'pumped_balance', 'value': True },
-        { 'name': 'large_amount_drain', 'value': True },
-        { 'name': 'large_amount_pump', 'value': True },
-        { 'name': 'far_distance', 'value': True }
-    ]
-
-    return get_occurrence_count(df, 'holder', occurances)
-
-
-def get_holder_bvn_occurance(df: pd.DataFrame):
-    # Get the occurance of the following features with the account holder_bvn
-    occurances = [
-        { 'name': 'reported', 'value': True },
-        { 'name': 'category', 'value': 'REVERSAL' },
-        { 'name': 'far_distance', 'value': True }
-    ]
-
-    return get_occurrence_count(df, 'holder_bvn', occurances)
-
-
-def get_related_occurance(df: pd.DataFrame):
-    # Get the occurance of the following features with the account related
-    occurances = [
-        { 'name': 'reported', 'value': True },
-        { 'name': 'category', 'value': 'REVERSAL' }
-    ]
-
-    return get_occurrence_count(df, 'related', occurances)
-
-
-def get_related_bvn_occurance(df: pd.DataFrame):
-    # Get the occurance of the following features with the account related_bvn
-    occurances = [
-        { 'name': 'reported', 'value': True },
-        { 'name': 'category', 'value': 'REVERSAL' }
-    ]
-
-    return get_occurrence_count(df, 'related_bvn', occurances)

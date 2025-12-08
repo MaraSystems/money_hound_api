@@ -5,6 +5,7 @@ def trail(before_df: pd.DataFrame, transaction_row, run):
     """Run function only on prior rows for a single transaction."""
     return run(before_df, transaction_row)
 
+
 def hound(df: pd.DataFrame, run=lambda d, t: (d, t)):
     """
     For each row in df, apply run() to all rows before it in time.
@@ -78,38 +79,4 @@ def rolling_averages(df, group, features, window):
     return df[columns]
 
 
-def get_rolling(df):
-    # Get the rolling average of these features
 
-    rolling_features = [
-        # Transaction dynamics
-        'amount', 'balance', 'balance_jump', 'balance_jump_rate',
-
-        # Distance
-        'distance_from_home (km)',  
-        
-        # Device usage
-        'holder_device_count_frequency', 
-
-        # Time
-        'holder_hour_bound_frequency',
-
-        # Holder - Related relationship
-        'holder_related_count_frequency',
-        
-        # Reversal Tracking
-        'holder_category_REVERSAL_occurance',
-
-        # Reported Tracking
-        'holder_reported_True_occurance'
-    ]
-
-    # Get for the specified windows
-    window_1 = rolling_averages(df, 'holder', rolling_features, 1)
-    window_7 = rolling_averages(df, 'holder', rolling_features, 7)
-    window_30 = rolling_averages(df, 'holder', rolling_features, 30)
-    window_120 = rolling_averages(df, 'holder', rolling_features, 120)
-
-    data = pd.concat([df, window_1, window_7, window_30, window_120], axis=1)
-    return data
-    

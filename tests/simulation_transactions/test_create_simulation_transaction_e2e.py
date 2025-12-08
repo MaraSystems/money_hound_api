@@ -19,9 +19,9 @@ class TestCreateSimulationTransctionEndpoint(TestFixture):
             .sort('time', DESCENDING)
             .limit(1).to_list()
         )
-        
+
         simulation_transaction_data = {
-            'amount': 1000,
+            'amount': 100,
             'holder': last_simulation_transaction['holder'],
             'holder_bank': last_simulation_transaction['holder_bank'],
             'related': last_simulation_transaction['holder'],
@@ -35,14 +35,13 @@ class TestCreateSimulationTransctionEndpoint(TestFixture):
             'simulation_id': simulation['_id']
         }
 
-        
         create_response = await async_client.post(
             '/simulation_transactions',
             json=simulation_transaction_data,
             headers={'Authorization': f'Bearer {self.token}'}
         )
         
-        # assert create_response.status_code == 201
+        assert create_response.status_code == 201
         # response_data = create_response.json()
         
         # assert 'data' in response_data
