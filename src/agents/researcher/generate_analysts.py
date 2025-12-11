@@ -1,7 +1,7 @@
 from src.agents.researcher.model import AnalystState, Perspectives
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from src.config.llms import llm
+from src.config.llms import get_llm
 
 analyst_instructions = """
     You are tasked with creating a set of AI analysts personas. Follow these instructions carefully:
@@ -19,6 +19,7 @@ def generate_analysts(state: AnalystState):
     feedback = state.get('feedback', '')
     iteration = state.get('iteration', 0)
 
+    llm = get_llm()
     structured_llm = llm.with_structured_output(Perspectives)
     system_message = analyst_instructions.format(topic=topic, max_analysts=max_analysts, feedback=feedback)
     response = structured_llm.invoke([SystemMessage(content=system_message)] + [HumanMessage(content='Generate the set of analysts.')])

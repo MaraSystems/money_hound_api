@@ -1,7 +1,7 @@
 from src.agents.researcher.model import AnalystState, AnalystReview
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from src.config.llms import llm
+from src.config.llms import get_llm
 
 analyst_reviewer_prompt = """
 You are reviewing the generated Analyst personas: {personas}.  
@@ -32,6 +32,7 @@ def review_analysts(state: AnalystState):
     personas = [str(analyst) for analyst in analysts]
 
     system_message = analyst_reviewer_prompt.format(personas=personas, topic=topic, depth=depth)
+    llm = get_llm()
     structured_llm = llm.with_structured_output(AnalystReview)
 
     response = structured_llm.invoke([SystemMessage(content=system_message)]+[HumanMessage(content=f"Review the analyst personas for {topic}")])

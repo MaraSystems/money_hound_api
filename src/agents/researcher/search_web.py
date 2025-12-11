@@ -2,7 +2,7 @@ from langchain_tavily import TavilySearch
 from langchain_core.messages import SystemMessage, HumanMessage
 
 from src.agents.researcher.model import InterviewerState
-from src.config.llms import llm
+from src.config.llms import get_llm
 
 tavily_search = TavilySearch(max_results=3, search_depth='advanced')
 
@@ -31,6 +31,7 @@ def web_search(state: InterviewerState):
     last_question = messages[-1]
 
     system_message = query_prompt.format(question=last_question)
+    llm = get_llm()
     response = llm.invoke([SystemMessage(content=system_message)] + [HumanMessage(content=f"Turn the question into a search query")])
 
     search_result = tavily_search.invoke(response.content)

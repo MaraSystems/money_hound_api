@@ -7,7 +7,7 @@ from src.graphs.support import get_support_graph
 from src.graphs.workflow import Step, get_workflow_graph
 from src.graphs.enhancer import get_enhancer_graph
 
-from src.config.llms import llm
+from src.config.llms import get_llm
 from src.lib.utils.function import TAXQ_TOOLS, FunctionEnum, Function, TAXQ_FUNCTIONS
 
 
@@ -60,6 +60,7 @@ def execute_model(state: TaxqState):
     tool_choice = [step.function for step in workflow]
     tools = [TAXQ_TOOLS[function] for function in tool_choice]
     
+    llm = get_llm()
     llm_with_tools = llm.bind_tools(tools=tools, tool_choice=tool_choice)
     response = llm_with_tools.invoke(state['messages'])
 

@@ -6,7 +6,7 @@ from typing import TypedDict, Annotated, List
 from langchain.schema import Document
 from pydantic import BaseModel, Field
 
-from src.config.llms import llm
+from src.config.llms import get_llm
 from src.config.vector_store import get_vector_store
 
 
@@ -93,6 +93,7 @@ def rank_model(state: ResearchState):
     formatted_prompt = RANKING_PROMPT.format(query=query, documents=documents)
     system_message = SystemMessage(content=formatted_prompt)
 
+    llm = get_llm()
     response = llm.with_structured_output(RankList).invoke([system_message]+[HumanMessage(content='Rank the documents')])
     state['documents'] = [doc for i, doc in enumerate(documents) if response.ranks[i].relevance > .4]
     return state
@@ -104,6 +105,8 @@ def web_model(state: ResearchState):
     search_count = state['search_count']
 
     formatted_prompt = SEARCH_PROMPT.format(query=query)
+
+    llm = get_llm()
     response = llm.invoke([SystemMessage(content=formatted_prompt)] + [HumanMessage(content=f"Turn the question into a search query")])
     
     tavily_search = TavilySearch(max_results=search_count, search_depth='advanced')

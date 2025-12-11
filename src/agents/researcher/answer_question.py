@@ -1,7 +1,7 @@
 from langchain_core.messages import SystemMessage, HumanMessage
 
 from src.agents.researcher.model import InterviewerState
-from src.config.llms import llm
+from src.config.llms import get_llm
 
 
 answer_prompt = """
@@ -33,6 +33,8 @@ def generate_answer(state: InterviewerState):
 
     formatted_context = "\n\n".join(str(item) for item in context)
     system_message = answer_prompt.format(question=last_question, context=formatted_context, topic=topic)
+    
+    llm = get_llm()
     response = llm.invoke([SystemMessage(content=system_message)] + [HumanMessage(content=f"Answer the question")])
     return {'messages': [HumanMessage(content=response.content, name='Expert')]}
 

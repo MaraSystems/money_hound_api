@@ -3,7 +3,7 @@ from langchain_core.messages import SystemMessage
 from langgraph.graph import StateGraph
 from langchain_core.tools import tool
 
-from src.config.llms import llm
+from src.config.llms import get_llm
 
 class SupportState(TypedDict):
     query: str
@@ -37,6 +37,7 @@ def support_model(state: SupportState):
     formatted_prompt = WORKFLOW_PROMPT.format(query=query, reasoning=reasoning)
     system_message = SystemMessage(content=formatted_prompt)
 
+    llm = get_llm()
     response = llm.invoke([system_message]+[SystemMessage(content='Answer the user')])
     state['reply'] = response.content
     return state

@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from langgraph.graph import StateGraph
 
 from src.lib.utils.function import Function, FunctionEnum
-from src.config.llms import llm
+from src.config.llms import get_llm
 
 
 class Step(BaseModel):
@@ -104,6 +104,7 @@ def workflow_model(state: WorkflowState):
     formatted_prompt = WORKFLOW_PROMPT.format(query=query, functions=functions)
     system_message = SystemMessage(content=formatted_prompt)
 
+    llm = get_llm()
     response = llm.with_structured_output(BreakDown).invoke([system_message]+[HumanMessage(content='Is the query within scope?')])
     state['workflow'] = response.workflow
     state['reasoning'] = response.reasoning

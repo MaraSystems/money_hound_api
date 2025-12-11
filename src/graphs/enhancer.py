@@ -3,7 +3,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_core.tools import tool
 from typing import TypedDict
 
-from src.config.llms import llm
+from src.config.llms import get_llm
 
 class EnhanceState(TypedDict):
     query: str
@@ -44,6 +44,7 @@ def enhance_model(state: EnhanceState):
     
     formatted_prompt = ENHANCE_PROMPT.format(context=context, feedback=feedback, query=query)
     system_message = SystemMessage(content=formatted_prompt)
+    llm = get_llm()
     response = llm.invoke([system_message]+[HumanMessage(content='Enhance the query')])
 
     return {'enhanced': response.content}

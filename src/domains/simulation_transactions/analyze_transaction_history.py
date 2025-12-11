@@ -6,5 +6,5 @@ from src.lib.utils.lazycache import lazyload
 from src.lib.utils.response import DataResponse
 
 
-async def analyze_simulation_transaction(df: pd.DataFrame, accounts_df: pd.DataFrame):
+async def analyze_transaction_history(df: pd.DataFrame, accounts_df: pd.DataFrame):
     ...
