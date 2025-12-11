@@ -174,9 +174,9 @@ def get_bound_relations_frequency(df: pd.DataFrame, target, features):
             key = (row[target], row[feat_name])
             row_value = row[feat_name]
             low, high = bounds[feat_name]
-
+            
             # Check if in bound
-            if low[idx] <= row_value <= high[idx]:
+            if low.iloc[idx] <= row_value <= high.iloc[idx]:
                 # Get current count
                 count = counts_dict[feat_name].get(key, 0)
                 results[f"{target}_{feat_name}_bound_frequency"].append(count)

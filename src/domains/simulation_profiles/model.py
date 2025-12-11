@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import List
+from uuid import uuid4
 from pydantic import BaseModel, Field, computed_field
 
 from src.lib.utils.base_entity import BaseEntity
@@ -7,7 +8,7 @@ from src.lib.utils.pagination import Page
 
 
 class CreateSimulationProfile(BaseModel):
-    user_id: str = Field(..., description="The id of the user")
+    user_id: str = Field(default_factory=lambda: f"USER_{str(uuid4())}", description="The id of the user")
     name: str = Field(..., description="The name of the user")
     gender: str = Field(..., description="The gender of the user")
     email: str = Field(..., description="The email of the user")

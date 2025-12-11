@@ -3,7 +3,8 @@ from pymongo.database import Database
 from bson import ObjectId
 from redis.asyncio import Redis
 
-from src.domains.simulation_transactions.model import SimulationTransaction
+from src.domains.simulation_transactions.hound_transaction import hound_transaction
+from src.domains.simulation_transactions.model import AnalyzedSimulationTransaction, SimulationTransaction
 from src.lib.utils.lazycache import lazyload
 from src.lib.utils.response import DataResponse
 
@@ -14,5 +15,6 @@ async def get_simulation_transaction(id: ObjectId, db: Database, cache: Redis):
 
     if not transaction:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Simulation Transaction not found: {str(id)}')
-
-    return DataResponse[SimulationTransaction](data=transaction)
+    
+    transaction['features'] = await hound_transaction(SimulationTransaction(**transaction), db)
+    return DataResponse[AnalyzedSimulationTransaction](data=transaction)

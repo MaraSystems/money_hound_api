@@ -1,10 +1,6 @@
 from datetime import datetime
-from typing import Annotated, Any, Literal, List, Optional
-from pydantic import BaseModel, Field, computed_field, field_validator
-from uuid import uuid4
-from enum import StrEnum
-
-from pydantic_core.core_schema import AnySchema
+from typing import Literal, Optional
+from pydantic import BaseModel, Field, computed_field
 
 from src.lib.utils.base_entity import BaseEntity
 from src.lib.utils.pagination import Page
@@ -50,7 +46,6 @@ class CreateSimulationTransaction(InitiateSimulationTransaction):
         return datetime.now()
 
 
-
 class SimulationTransaction(BaseEntity):
     amount: float = Field(..., description="The amount of the transaction")
     balance: float = Field(..., description="The balance of the transaction")
@@ -69,6 +64,10 @@ class SimulationTransaction(BaseEntity):
     reference: str = Field(..., description="The reference of the transaction")
     reported: bool = Field(..., description="The report status of the transaction")
     simulation_id: str = Field(..., description="The id of the simulation")
+
+
+class AnalyzedSimulationTransaction(SimulationTransaction):
+    features: dict = Field({}, description="The engineered features of the transaction")
     
 
 class ListSimulationTransactions(Page):

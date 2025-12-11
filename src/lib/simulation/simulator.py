@@ -8,6 +8,8 @@ import stat
 import os
 from uuid import uuid4
 
+from src.lib.analytics import extractor
+from src.lib.analytics.anomalizer import check_unusual
 from src.lib.simulation import banking, clock
 from src.lib.simulation.individual import Individual
 from src.lib.simulation.events import Events
@@ -242,6 +244,25 @@ class Simulator:
             file_path = target_dir / f'{name}.csv'
             self.datasets.append(str(file_path))
             dataframe.to_csv(file_path, index=False)
+
+
+    async def engineer_features(self):
+        df = self.generated_data['transactions'].reset_index(drop=True)
+        accounts_df = self.generated_data['accounts']
+
+        df = df.apply(lambda row: extractor.extract_account_features(row, accounts_df), axis=1)
+        df = df.apply(extractor.extract_time_features, axis=1)
+        df = df.apply(extractor.extract_money_features, axis=1)
+        df = df.apply(lambda row: extractor.extract_location_features(df, row), axis=1)
+        df = df.apply(lambda row: extractor.extract_frequency_features(df, row), axis=1)
+        df = extractor.extract_bounds(df, 'holder')
+        df = extractor.extract_holder_occurance(df)
+        df = extractor.extract_holder_bvn_occurance(df)
+        df = extractor.extract_related_occurance(df)
+        df = extractor.extract_related_bvn_occurance(df)
+        df = extractor.extract_rolling_averages(df)
+
+        return check_unusual(df)
 
 
 def get_simulator():

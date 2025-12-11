@@ -78,7 +78,7 @@ def extract_frequency_features(df: pd.DataFrame, data):
     return data
 
 
-def extract_bounds(df: pd.DataFrame):
+def extract_bounds(df: pd.DataFrame, key):
     bounds = [
         # Has user ever transacted around this hour
         { 'name': 'hour', 'bound': lambda x: (x-1, x+1) }, 
@@ -97,7 +97,7 @@ def extract_bounds(df: pd.DataFrame):
         { 'name': 'balance_jump_rate_absolute', 'bound': lambda x: (x - 0.2, x + 0.2) }
     ]
 
-    return engineer.get_bound_relations_frequency(df, 'holder', bounds)
+    return engineer.get_bound_relations_frequency(df, key, bounds)
 
 
 def extract_holder_occurance(df: pd.DataFrame):

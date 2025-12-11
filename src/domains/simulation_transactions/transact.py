@@ -3,7 +3,7 @@ from pymongo.database import Database
 from redis.asyncio import Redis
 
 from src.domains.simulation_accounts.model import SimulationAccount
-from src.domains.simulation_transactions.analyze_transaction import analyze_transaction
+from src.domains.simulation_transactions.hound_transaction import hound_transaction
 from src.domains.simulation_transactions.get_simulation_transaction import get_simulation_transaction
 from src.domains.simulation_transactions.model import CreateSimulationTransaction, InitiateSimulationTransaction, SimulationTransaction
 
@@ -14,7 +14,7 @@ async def debit_account(holder_account: SimulationAccount, related_account: Simu
 
     balance = holder_account['balance'] - payload.amount
     if balance < 0:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Insufficient Fund: {holder_account['account_no']}_{holder_account['bank_name']}")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Insufficient Fund: {holder_account['balance']}")
 
     data = payload.model_dump(exclude=['holder', 'holder_bank', 'related', 'related_bank', 'type', 'category'])
     transaction = CreateSimulationTransaction(
@@ -31,12 +31,8 @@ async def debit_account(holder_account: SimulationAccount, related_account: Simu
         reference=reference
     )
 
-    analyzed = await analyze_transaction(transaction, db)
-    print(analyzed)
-    if analyzed['fraud']:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Unusual Transaction Detected, Fraud Score: {analyzed['fraud_score']}")
-
-    insert = await simulation_transaction_collection.insert_one(transaction.model_dump())
+    transaction_data = transaction.model_dump()    
+    insert = await simulation_transaction_collection.insert_one(transaction_data)
     await simulation_account_collection.update_one({'account_no': holder_account['account_no'], 'bank_name': holder_account['bank_name']}, {'$set': {'balance': balance}})
 
     inserted_transaction = await get_simulation_transaction(insert.inserted_id, db, cache)

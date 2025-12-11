@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.preprocessing import RobustScaler
 from sklearn.ensemble import IsolationForest
 
-from src.lib.analytics import engineer
+from src.lib.analytics import engineer, extractor
 
 
 def anomalize(df: pd.DataFrame, name, columns=[]):
@@ -106,3 +106,27 @@ def check_unusual(df: pd.DataFrame):
     df_unsual = unsual_device(df_unsual)
 
     return anomalize(df_unsual, 'fraud')
+
+
+def detect_fraud(df: pd.DataFrame, accounts_df: pd.DataFrame):
+    """
+        Analyze the dataframe and plot the results
+
+        @param df: The transaction dataframe to analyze
+        @param accounts_df: The accounts dataframe to analyze
+
+        returns pd.DataFrame
+    """
+    df = df.apply(lambda row: extractor.extract_account_features(row, accounts_df), axis=1)
+    df = df.apply(extractor.extract_time_features, axis=1)
+    df = df.apply(extractor.extract_money_features, axis=1)
+    df = df.apply(lambda row: extractor.extract_location_features(df, row), axis=1)
+    df = df.apply(lambda row: extractor.extract_frequency_features(df, row), axis=1)
+    df = extractor.extract_bounds(df, 'holder')
+    df = extractor.extract_holder_occurance(df)
+    df = extractor.extract_holder_bvn_occurance(df)
+    df = extractor.extract_related_occurance(df)
+    df = extractor.extract_related_bvn_occurance(df)
+    df = extractor.extract_rolling_averages(df)
+
+    return check_unusual(df)

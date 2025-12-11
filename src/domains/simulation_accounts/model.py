@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import List
+from uuid import uuid4
 from pydantic import BaseModel, Field, computed_field
 
 from src.lib.utils.base_entity import BaseEntity
@@ -7,7 +8,7 @@ from src.lib.utils.pagination import Page
 
 
 class CreateSimulationAccount(BaseModel):
-    account_no: str = Field(..., description="The account no of the account")
+    account_no: str = Field(default_factory=lambda: f"ACC_{str(uuid4())[:8]}", description="The account no of the account")    
     account_name: str = Field(..., description="The account name of the account")
     bank_name: str = Field(..., description="The bank_name of the account")
     balance: float = Field(..., description="The balance of the account")
@@ -16,7 +17,6 @@ class CreateSimulationAccount(BaseModel):
     merchant: bool = Field(..., description="The merchant status of the account")
     opening_device: str = Field(..., description="The device the account was opened with")
     simulation_id: str = Field(..., description="The id of the simulation")
-
 
     @computed_field
     @property

@@ -9,7 +9,7 @@ from src.domains.auth.model import CurrentUser
 from src.domains.simulation_transactions.create_simulation_transaction import create_simulation_transaction
 from src.domains.simulation_transactions.get_simulation_transaction import get_simulation_transaction
 from src.domains.simulation_transactions.list_simulation_transactions import list_simulation_transactions
-from src.domains.simulation_transactions.model import ListSimulationTransactions, SimulationTransaction, InitiateSimulationTransaction
+from src.domains.simulation_transactions.model import AnalyzedSimulationTransaction, ListSimulationTransactions, SimulationTransaction, InitiateSimulationTransaction
 from src.config.cache import get_cache
 from src.config.database import get_db
 from src.lib.utils.response import DataResponse
@@ -20,7 +20,7 @@ simulation_transactions_router = APIRouter(prefix='/simulation_transactions')
 
 @simulation_transactions_router.post(
     '', 
-    response_model=DataResponse[SimulationTransaction],
+    response_model=DataResponse[AnalyzedSimulationTransaction],
     status_code=201,
     name="Create Simulation Transaction")
 async def create(
@@ -34,7 +34,7 @@ async def create(
 
 @simulation_transactions_router.get(
     '/{id}', 
-    response_model=DataResponse[SimulationTransaction], 
+    response_model=DataResponse[AnalyzedSimulationTransaction], 
     name="Get Simulation Transactions"
 )
 async def get(
@@ -42,7 +42,7 @@ async def get(
     user: CurrentUser = Depends(get_current_user),
     db=Depends(get_db),
     cache=Depends(get_cache),
-) -> DataResponse[SimulationTransaction]:
+) -> DataResponse[AnalyzedSimulationTransaction]:
     return await get_simulation_transaction(ObjectId(id), db, cache)
 
 
