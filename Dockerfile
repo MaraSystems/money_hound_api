@@ -1,14 +1,21 @@
-FROM public.ecr.aws/lambda/python:3.11
-
-WORKDIR ${LAMBDA_TASK_ROOT}
-
-# Copy requirements
+# Build stage
+FROM python:3.11-slim AS builder
+WORKDIR /app
 COPY requirements.txt .
 
-# Install prebuilt wheels only
-RUN pip install --no-cache-dir -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
+RUN pip install --upgrade pip setuptools wheel
 
-# Copy app code
+# Install packages into /install in a Lambda-compatible layout
+RUN pip install --no-cache-dir -r requirements.txt --target /install
+
+# Lambda stage
+FROM public.ecr.aws/lambda/python:3.11
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+# Copy installed packages
+COPY --from=builder /install/ ${LAMBDA_TASK_ROOT}/
+
+# Copy application code
 COPY src/ ./src/
 
 # Lambda entrypoint
