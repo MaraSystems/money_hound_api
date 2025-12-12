@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException
 from contextlib import asynccontextmanager
 from fastapi.exceptions import RequestValidationError, ResponseValidationError
 from fastapi.openapi.utils import get_openapi
-from mangum import Mangum
 
 from .middlewares.error_handler import http_exception_handler, response_exception_handler, system_exception_handler, validation_exception_handler
 from .middlewares.requests_logger import RequestLoggingMiddleware
@@ -23,7 +22,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title=config.APP_NAME, lifespan=lifespan)
-handler = Mangum(app)
 
 register_routes(app)
 
