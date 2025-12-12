@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.11
+FROM public.ecr.aws/lambda/tensorflow:2.13.0-cpu
 
 # Lambda task root is already set by the base image
 WORKDIR ${LAMBDA_TASK_ROOT}
