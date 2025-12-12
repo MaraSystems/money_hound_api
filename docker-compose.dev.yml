@@ -1,10 +1,10 @@
 services:
 
-  api:
+  api_dev:
     container_name: api
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.local
     ports:
       - "8080:8080"
     env_file:
@@ -12,7 +12,6 @@ services:
     environment:
       MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
       REDIS_URL: redis://redis:6379
-      AWS_LAMBDA_RUNTIME_API: localhost:8080
     depends_on:
       - mongodb
       - redis
@@ -55,7 +54,7 @@ services:
     volumes:
       - ./src:/app/src
     depends_on:
-      - api
+      - api_dev
 
   schedule:
     container_name: schedule

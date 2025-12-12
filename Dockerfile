@@ -1,21 +1,12 @@
-FROM public.ecr.aws/lambda/tensorflow:2.13.0-cpu
-
-# Lambda task root is already set by the base image
-WORKDIR ${LAMBDA_TASK_ROOT}
-
-# Copy requirements first
+# Build stage
+FROM python:3.11-slim AS builder
+WORKDIR /app
 COPY requirements.txt .
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install --prefix=/install --no-cache-dir -r requirements.txt
 
-# Install deps into Lambda task dir (must not install globally)
-# Pin numpy/pandas to Lambda-compatible versions to avoid compilation errors
-RUN pip install --no-cache-dir \
-        numpy==1.26.4 \
-        pandas==2.1.4 \
-        -r requirements.txt \
-        --target "${LAMBDA_TASK_ROOT}"
-
-# Copy application code
+# Lambda stage
+FROM public.ecr.aws/lambda/python:3.11
+COPY --from=builder /install /var/task
 COPY src/ ./src/
-
-# Lambda entrypoint → FastAPI adapter (Mangum)
 CMD ["src.main.handler"]

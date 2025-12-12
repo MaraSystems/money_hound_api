@@ -2,6 +2,8 @@
 [tool.taskipy.tasks]
 up_build = "docker compose up --build"
 up = "docker compose up"
+dev_build = "docker compose -f docker-compose.dev.yml up --build"
+dev = "docker compose -f docker-compose.dev.yml up"
 up_container = "docker compose -f docker-compose.local.yml up -d && uvicorn src.main:app --host 0.0.0.0 --port 8080 --reload"
 test_build = "docker compose -f docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from tests"
 test_container = "docker compose -f docker-compose.local.yml up -d && pytest -v -s"
