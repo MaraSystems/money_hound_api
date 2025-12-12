@@ -1,17 +1,21 @@
 FROM public.ecr.aws/lambda/python:3.11
 
-# Set the working directory inside Lambda
+# Lambda task root is already set by the base image
 WORKDIR ${LAMBDA_TASK_ROOT}
 
-# Copy requirements
+# Copy requirements first
 COPY requirements.txt .
 
-# Install dependencies into Lambda’s task root
-RUN pip install --no-cache-dir -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
+# Install deps into Lambda task dir (must not install globally)
+# Pin numpy/pandas to Lambda-compatible versions to avoid compilation errors
+RUN pip install --no-cache-dir \
+        numpy==1.26.4 \
+        pandas==2.1.4 \
+        -r requirements.txt \
+        --target "${LAMBDA_TASK_ROOT}"
 
-# Copy application source
+# Copy application code
 COPY src/ ./src/
 
-# Lambda uses a handler, not Uvicorn
-# Mangum converts FastAPI → Lambda-compatible
+# Lambda entrypoint → FastAPI adapter (Mangum)
 CMD ["src.main.handler"]
