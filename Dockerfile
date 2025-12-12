@@ -11,7 +11,6 @@ RUN pip install --no-cache-dir -r requirements.txt --target "${LAMBDA_TASK_ROOT}
 
 # Copy application source
 COPY src/ ./src/
-COPY secrets/ ./secrets/
 
 # Lambda uses a handler, not Uvicorn
 # Mangum converts FastAPI → Lambda-compatible
