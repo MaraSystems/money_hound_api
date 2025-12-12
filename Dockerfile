@@ -17,7 +17,7 @@ COPY --from=builder /install/ ${LAMBDA_TASK_ROOT}/
 
 # Copy application code
 COPY src/ ./src/
-COPY src/lambda.py ./
+COPY lambda.py ./
 
 # Lambda entrypoint
 CMD ["lambda.handler"]
