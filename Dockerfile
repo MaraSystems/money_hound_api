@@ -1,20 +1,18 @@
-FROM python:3.11-slim
+FROM public.ecr.aws/lambda/python:3.11
 
-WORKDIR /app
+# Set the working directory inside Lambda
+WORKDIR ${LAMBDA_TASK_ROOT}
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
+# Copy requirements
 COPY requirements.txt .
-RUN pip install --upgrade pip setuptools wheel
 
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies into Lambda’s task root
+RUN pip install --no-cache-dir -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 
-COPY /src /app/src
-COPY secrets/ /app/secrets/
+# Copy application source
+COPY src/ ./src/
+COPY secrets/ ./secrets/
 
-EXPOSE 8080
-
-CMD ["sh", "-c", "uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8080} --no-access-log --reload"]
+# Lambda uses a handler, not Uvicorn
+# Mangum converts FastAPI → Lambda-compatible
+CMD ["src.main.handler"]

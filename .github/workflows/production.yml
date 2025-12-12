@@ -1,12 +1,12 @@
-name: Deploy to Render
+name: Deploy FastAPI to AWS Lambda
 
 on:
   push:
     branches:
-      - main   # or your branch
+      - main
 
 jobs:
-  test-and-deploy:
+  test-build-deploy:
     runs-on: ubuntu-latest
 
     services:
@@ -14,26 +14,22 @@ jobs:
         image: mongo:6
         ports:
           - 27017:27017
-        options: >-
-          --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
       redis:
         image: redis:7
         ports:
           - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
     steps:
+
+      # -----------------------
+      # CHECKOUT
+      # -----------------------
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # -----------------------
+      # PYTHON SETUP + TESTS
+      # -----------------------
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -52,9 +48,37 @@ jobs:
           MONGO_DB: moneyhound_db
           REDIS_URL: redis://localhost:6379
 
-      - name: Trigger Render Deploy
-        if: success()
+      # -----------------------
+      # AWS LOGIN
+      # -----------------------
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # -----------------------
+      # BUILD DOCKER IMAGE
+      # -----------------------
+      - name: Build Docker image
         run: |
-          curl -X POST "$RENDER_DEPLOY_HOOK"
-        env:
-          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+          IMAGE_TAG=$(date +%s)
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+          docker build -t ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG .
+
+      - name: Push image to ECR
+        run: |
+          docker push ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG
+
+      # -----------------------
+      # DEPLOY LAMBDA
+      # -----------------------
+      - name: Deploy to Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
+            --image-uri ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG

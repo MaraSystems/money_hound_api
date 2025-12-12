@@ -2,18 +2,17 @@
 [tool.taskipy.tasks]
 up_build = "docker compose up --build"
 up = "docker compose up"
-down = "docker compose down"
 up_container = "docker compose -f docker-compose.local.yml up -d && uvicorn src.main:app --host 0.0.0.0 --port 8080 --reload"
 test_build = "docker compose -f docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from tests"
 test_container = "docker compose -f docker-compose.local.yml up -d && pytest -v -s"
-test_container_watch = "docker compose -f docker-compose.local.yml up -d && pytest-watch -- -s"
-test_watch = "docker compose -f docker-compose.testwait.yml up"
+test_watch = "docker compose -f docker-compose.local.yml up -d && pytest-watch -- -s"
 queue = "celery -A src.config.queue worker --loglevel=info"
 scheduler = "celery -A src.config.queue.celery_app beat --loglevel=info"
 queue_restart = "celery -A src.config.queue.celery_app multi restart worker --loglevel=info"
 scheduler_restart = "celery -A src.config.queue.celery_app multi restart beat --loglevel=info"
 lint = "flake8 ."
 seed = "python scripts/seed_db.py"
+down = "docker compose down"
 
 
 [tool.pytest.ini_options]

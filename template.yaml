@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Moneyhound_API Lambda Docker deployment
+
+Resources:
+  Moneyhound_API_Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Timeout: 15
+      MemorySize: 512
+      Events:
+        Api:
+          Type: HttpApi
+      ImageUri: !Ref Moneyhound_API_Function.ImageUri
+
+Outputs:
+  ApiUrl:
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
