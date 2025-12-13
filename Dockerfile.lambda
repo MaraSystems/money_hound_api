@@ -8,7 +8,7 @@ COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel
 
 # Install only precompiled wheels (skip source compilation)
-RUN pip install --no-cache-dir --only-binary=:all: -r requirements.txt --target /install
+RUN pip install --no-cache-dir --target /install -r requirements.txt
 
 # ------------------------------
 # Lambda stage
