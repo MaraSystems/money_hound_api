@@ -20,7 +20,6 @@ jobs:
           - 6379:6379
 
     steps:
-
       # -----------------------
       # CHECKOUT
       # -----------------------
@@ -62,28 +61,31 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       # -----------------------
-      # BUILD DOCKER IMAGE
+      # BUILD IMAGE (COMPOSE)
       # -----------------------
-      - name: Build Docker image (Lambda)
+      - name: Build Lambda Docker image
         run: |
           IMAGE_TAG=$(date +%s)
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
           docker compose \
             -f docker-compose.lambda.yml \
-            build ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG
-        env:
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-            
-      - name: Push image to ECR
-        run: |
-          docker compose \
-            -f docker-compose.lambda.yml \
-            push ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG
+            build api
         env:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
 
+      # -----------------------
+      # PUSH IMAGE (COMPOSE)
+      # -----------------------
+      - name: Push Lambda image to ECR
+        run: |
+          docker compose \
+            -f docker-compose.lambda.yml \
+            push api
+        env:
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
 
       # -----------------------
       # VERIFY IMAGE EXISTS (ANTI-LAMBDA-RAGE)
@@ -101,4 +103,4 @@ jobs:
         run: |
           aws lambda update-function-code \
             --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
-            --image-uri ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG
+            --image-uri ${{ secrets.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}

@@ -1,6 +1,7 @@
 services:
 
   api:
+    image: ${ECR_REPOSITORY}:${IMAGE_TAG}
     container_name: api
     build:
       context: .
