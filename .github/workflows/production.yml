@@ -92,9 +92,11 @@ jobs:
       # -----------------------
       - name: Verify image exists in ECR
         run: |
+          REPO_NAME=$(echo "${{ secrets.ECR_REPOSITORY }}" | cut -d'/' -f2)
           aws ecr describe-images \
-            --repository-name $(basename ${{ secrets.ECR_REPOSITORY }}) \
+            --repository-name "$REPO_NAME" \
             --image-ids imageTag=${{ env.IMAGE_TAG }}
+
 
       # -----------------------
       # DEPLOY LAMBDA
