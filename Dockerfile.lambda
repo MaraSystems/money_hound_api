@@ -7,6 +7,13 @@ WORKDIR ${LAMBDA_TASK_ROOT}
 # Copy only requirements first
 COPY requirements.txt .
 
+# Install build dependencies FIRST
+RUN yum install -y \
+    gcc \
+    g++ \
+    make \
+    python3-devel
+
 # Install dependencies directly into Lambda task root
 RUN pip install --no-cache-dir \
     -r requirements.txt \
