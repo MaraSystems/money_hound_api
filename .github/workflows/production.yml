@@ -88,17 +88,6 @@ jobs:
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
 
       # -----------------------
-      # VERIFY IMAGE EXISTS (ANTI-LAMBDA-RAGE)
-      # -----------------------
-      - name: Verify image exists in ECR
-        run: |
-          REPO_NAME=$(echo "${{ secrets.ECR_REPOSITORY }}" | cut -d'/' -f2)
-          aws ecr describe-images \
-            --repository-name "$REPO_NAME" \
-            --image-ids imageTag=${{ env.IMAGE_TAG }}
-
-
-      # -----------------------
       # DEPLOY LAMBDA
       # -----------------------
       - name: Deploy to Lambda
