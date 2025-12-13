@@ -1,7 +1,7 @@
 # ------------------------------
 # Builder stage: full Linux build
 # ------------------------------
-FROM python:3.11-slim AS builder
+FROM python:3.11-slim-bookworm AS builder
 WORKDIR /app
 
 # Install compilers and headers needed for C extensions
@@ -33,4 +33,3 @@ COPY lambda.py ${LAMBDA_TASK_ROOT}/
 
 # Lambda entrypoint
 CMD ["lambda.handler"]
-    
