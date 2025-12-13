@@ -71,7 +71,7 @@ jobs:
 
           docker compose \
             -f docker-compose.lambda.yml \
-            build api
+            build ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG
         env:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
             
@@ -79,10 +79,20 @@ jobs:
         run: |
           docker compose \
             -f docker-compose.lambda.yml \
-            push api
+            push ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG
         env:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
+
+
+      # -----------------------
+      # VERIFY IMAGE EXISTS (ANTI-LAMBDA-RAGE)
+      # -----------------------
+      - name: Verify image exists in ECR
+        run: |
+          aws ecr describe-images \
+            --repository-name $(basename ${{ secrets.ECR_REPOSITORY }}) \
+            --image-ids imageTag=${{ env.IMAGE_TAG }}
 
       # -----------------------
       # DEPLOY LAMBDA
