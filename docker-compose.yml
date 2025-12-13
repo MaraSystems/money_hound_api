@@ -46,8 +46,6 @@ services:
   queue:
     container_name: queue
     build: .
-    env_file:
-      - .env
     environment:
       MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
       REDIS_URL: redis://redis:6379
@@ -60,8 +58,6 @@ services:
   schedule:
     container_name: schedule
     build: .
-    env_file:
-      - .env
     environment:
       MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
       REDIS_URL: redis://redis:6379
@@ -74,8 +70,6 @@ services:
   flower:
     container_name: flower
     build: .
-    env_file:
-      - .env
     environment:
       MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
       REDIS_URL: redis://redis:6379
