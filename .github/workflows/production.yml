@@ -64,15 +64,25 @@ jobs:
       # -----------------------
       # BUILD DOCKER IMAGE
       # -----------------------
-      - name: Build Docker image
+      - name: Build Docker image (Lambda)
         run: |
           IMAGE_TAG=$(date +%s)
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-          docker build -t ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG .
 
+          docker compose \
+            -f docker-compose.lambda.yml \
+            build api
+        env:
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+            
       - name: Push image to ECR
         run: |
-          docker push ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG
+          docker compose \
+            -f docker-compose.lambda.yml \
+            push api
+        env:
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
 
       # -----------------------
       # DEPLOY LAMBDA

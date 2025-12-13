@@ -1,23 +1,22 @@
-# Build stage
-FROM python:3.11-slim AS builder
-WORKDIR /app
-COPY requirements.txt .
+FROM python:3.11-slim
 
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel
 
-# Install packages into /install in a Lambda-compatible layout
-RUN pip install --no-cache-dir -r requirements.txt --target /install
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Lambda stage
-FROM public.ecr.aws/lambda/python:3.12
-WORKDIR ${LAMBDA_TASK_ROOT}
+COPY /src /app/src
+COPY secrets/ /app/secrets/
+COPY pyproject.toml .
 
-# Copy installed packages
-COPY --from=builder /install/ ${LAMBDA_TASK_ROOT}/
 
-# Copy application code
-COPY src/ ./src/
-COPY lambda.py ./
+EXPOSE 8080
 
-# Lambda entrypoint
-CMD ["lambda.handler"]
+CMD ["sh", "-c", "uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8080} --no-access-log --reload"]
