@@ -1,23 +1,20 @@
-# Build stage
-FROM python:3.11-slim AS builder
-WORKDIR /app
-COPY requirements.txt .
+# Use AWS Lambda Python 3.11 base image (prebuilt for Lambda)
+FROM public.ecr.aws/lambda/python:3.11
 
-RUN pip install --upgrade pip setuptools wheel
-
-# Install packages into /install in a Lambda-compatible layout
-RUN pip install --no-cache-dir -r requirements.txt --target /install
-
-# Lambda stage
-FROM public.ecr.aws/lambda/python:3.12
+# Set working directory inside Lambda
 WORKDIR ${LAMBDA_TASK_ROOT}
 
-# Copy installed packages
-COPY --from=builder /install/ ${LAMBDA_TASK_ROOT}/
+# Copy only requirements first
+COPY requirements.txt .
+
+# Install dependencies directly into Lambda task root
+RUN pip install --no-cache-dir \
+    -r requirements.txt \
+    --target "${LAMBDA_TASK_ROOT}"
 
 # Copy application code
 COPY src/ ${LAMBDA_TASK_ROOT}/src/
-COPY lambda.py ${LAMBDA_TASK_ROOT}
+COPY lambda.py ${LAMBDA_TASK_ROOT}/
 
 # Lambda entrypoint
 CMD ["lambda.handler"]
