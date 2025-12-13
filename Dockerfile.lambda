@@ -1,7 +1,7 @@
 # ------------------------------
 # Builder stage: full Linux build
 # ------------------------------
-FROM python:3.11-slim-bookworm AS builder
+FROM python:3.11-slim AS builder
 WORKDIR /app
 
 # Install compilers and headers needed for C extensions
@@ -21,7 +21,7 @@ RUN pip install --no-cache-dir -r requirements.txt --target /install
 # ------------------------------
 # Lambda stage
 # ------------------------------
-FROM public.ecr.aws/lambda/python:3.11
+FROM public.ecr.aws/lambda/python:3.12
 WORKDIR ${LAMBDA_TASK_ROOT}
 
 # Copy all installed packages from builder
