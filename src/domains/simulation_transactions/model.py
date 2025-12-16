@@ -78,3 +78,9 @@ class ListSimulationTransactions(Page):
     channel: Optional[Literal['APP', 'CARD', 'USSD']] = Field(None, description="The channel used for the transaction")
     reported: Optional[bool] = Field(None, description="The report status of the transaction")
     
+
+class TransactionsAnalysis(BaseModel):
+    numerical: dict = Field(..., description="The numerical description of the transacions")
+    categorical: dict = Field(..., description="The categorical description of the transacions")
+    volumns: dict = Field(..., description="The volumn description of the transacions")
+    proportions: dict = Field(..., description="The proportional description of the transacions")

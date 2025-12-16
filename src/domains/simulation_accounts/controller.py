@@ -6,12 +6,14 @@ from fastapi.routing import APIRouter
 from pymongo.database import Database
 
 from src.domains.auth.model import CurrentUser
+from src.domains.simulation_accounts.analyze_simulation_account import analyze_simulation_account
 from src.domains.simulation_accounts.create_simulation_account import create_simulation_account
 from src.domains.simulation_accounts.get_simulation_account import get_simulation_account
 from src.domains.simulation_accounts.list_simulation_accounts import list_simulation_accounts
 from src.domains.simulation_accounts.model import CreateSimulationAccount, ListSimulationAccounts, SimulationAccount
 from src.config.cache import get_cache
 from src.config.database import get_db
+from src.domains.simulation_transactions.model import TransactionsAnalysis
 from src.lib.utils.response import DataResponse
 from src.middlewares.auth_guard import get_current_user
 
@@ -57,3 +59,18 @@ async def fetch_list(
     db=Depends(get_db)
 ) -> DataResponse[List[SimulationAccount]]:
     return await list_simulation_accounts(payload, db)
+
+
+@simulation_accounts_router.get(
+    '/{id}/analyze', 
+    response_model=DataResponse[TransactionsAnalysis], 
+    name="Analyze Simulation Account"
+)
+async def get(
+    id: str, 
+    user: CurrentUser = Depends(get_current_user),
+    db=Depends(get_db),
+    cache=Depends(get_cache),
+) -> DataResponse[TransactionsAnalysis]:
+    return await analyze_simulation_account(ObjectId(id), db, cache)
+

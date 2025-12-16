@@ -129,4 +129,9 @@ def detect_fraud(df: pd.DataFrame, accounts_df: pd.DataFrame):
     df = extractor.extract_related_bvn_occurance(df)
     df = extractor.extract_rolling_averages(df)
 
-    return check_unusual(df)
+    fraud_df = check_unusual(df.copy())
+    columns = [c for c in fraud_df.columns if c not in df.columns]
+    df[columns] = fraud_df[columns]
+
+    return df
+

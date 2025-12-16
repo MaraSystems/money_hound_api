@@ -3,6 +3,8 @@ import seaborn as sns
 import numpy as np
 import pandas as pd
 
+from src.lib.analytics.engineer import get_cashflow
+
 
 def plotter(plot, columns, figsize=(12, 8)):
     """

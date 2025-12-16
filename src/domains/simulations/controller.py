@@ -5,6 +5,8 @@ from fastapi.routing import APIRouter
 from pymongo.database import Database
 
 from src.domains.auth.model import CurrentUser
+from src.domains.simulation_transactions.model import TransactionsAnalysis
+from src.domains.simulations.analyze_simulation import analyze_simulation
 from src.domains.simulations.delete_simulation import delete_simulation
 from src.domains.simulations.get_simulation import get_simulation
 from src.domains.simulations.list_simulations import list_simulations
@@ -86,3 +88,17 @@ async def delete(
     cache=Depends(get_cache),
 ) -> DataResponse[None]:
     return await delete_simulation(ObjectId(id), str(user.id), db, cache)
+
+
+@simulations_router.get(
+    '/{id}/analyze', 
+    response_model=DataResponse[TransactionsAnalysis], 
+    name="Analyze Simulation"
+)
+async def get(
+    id: str, 
+    user: CurrentUser = Depends(get_current_user),
+    db=Depends(get_db),
+    cache=Depends(get_cache),
+) -> DataResponse[TransactionsAnalysis]:
+    return await analyze_simulation(ObjectId(id), db, cache)

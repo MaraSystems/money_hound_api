@@ -36,6 +36,10 @@ def get_cashflow(df: pd.DataFrame, group):
 
     # Get the netflow for each group
     cash_flow_pivot = cash_flow.pivot_table(index=group, columns='type', values='amount', aggfunc='sum').reset_index()
+
+    cash_flow_pivot['DEBIT'] = 0 if 'DEBIT' not in cash_flow_pivot.columns else cash_flow_pivot['DEBIT']
+    cash_flow_pivot['CREDIT'] = 0 if 'CREDIT' not in cash_flow_pivot.columns else cash_flow_pivot['CREDIT']
+    
     cash_flow_pivot['NETFLOW'] = cash_flow_pivot['CREDIT'] - cash_flow_pivot['DEBIT']
 
     # Add the netflow for each group

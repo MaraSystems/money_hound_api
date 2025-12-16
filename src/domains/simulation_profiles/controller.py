@@ -6,12 +6,14 @@ from fastapi.routing import APIRouter
 from pymongo.database import Database
 
 from src.domains.auth.model import CurrentUser
+from src.domains.simulation_profiles.analyze_simulation_profile import analyze_simulation_profile
 from src.domains.simulation_profiles.create_simulation_profile import create_simulation_profile
 from src.domains.simulation_profiles.get_simulation_profile import get_simulation_profile
 from src.domains.simulation_profiles.list_simulation_profiles import list_simulation_profiles
 from src.domains.simulation_profiles.model import CreateSimulationProfile, ListSimulationProfiles, SimulationProfile
 from src.config.cache import get_cache
 from src.config.database import get_db
+from src.domains.simulation_transactions.model import TransactionsAnalysis
 from src.lib.utils.response import DataResponse
 from src.middlewares.auth_guard import get_current_user
 
@@ -57,3 +59,18 @@ async def fetch_list(
     db=Depends(get_db)
 ) -> DataResponse[List[SimulationProfile]]:
     return await list_simulation_profiles(payload, db)
+
+
+@simulation_profiles_router.get(
+    '/{id}/analyze', 
+    response_model=DataResponse[TransactionsAnalysis], 
+    name="Analyze Simulation Profile"
+)
+async def get(
+    id: str, 
+    user: CurrentUser = Depends(get_current_user),
+    db=Depends(get_db),
+    cache=Depends(get_cache),
+) -> DataResponse[TransactionsAnalysis]:
+    return await analyze_simulation_profile(ObjectId(id), db, cache)
+

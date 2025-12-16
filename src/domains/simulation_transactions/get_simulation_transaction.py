@@ -16,5 +16,6 @@ async def get_simulation_transaction(id: ObjectId, db: Database, cache: Redis):
     if not transaction:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Simulation Transaction not found: {str(id)}')
     
-    transaction['features'] = await hound_transaction(SimulationTransaction(**transaction), db)
+    features = await hound_transaction(SimulationTransaction(**transaction), db)
+    transaction['features'] = {k: v for k, v in features.items() if k not in transaction}
     return DataResponse[AnalyzedSimulationTransaction](data=transaction)
