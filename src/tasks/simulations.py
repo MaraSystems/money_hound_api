@@ -62,7 +62,7 @@ async def save_simulation(payload: Simulation, user_id: str, sim: Simulator, db:
     await simulation_collection.update_one({'_id': ObjectId(payload['_id'])}, {'$set': {'status': 'COMPLETE'}})
 
     user_collection = db.users
-    user_details: User = await lazyload(cache, f'user:{user_id}', loader=user_collection.find_one, params={'_id': ObjectId(user_id), 'hidden': False})
+    user_details: User = await lazyload(cache, f'user:{user_id}', loader=user_collection.find_one, params={'filter': {'_id': ObjectId(user_id), 'hidden': False}})
 
     transactions = prepare_data(sim.generated_data, payload, 'transactions')
     transactions = [CreateSimulationTransaction(**item).model_dump() for item in transactions]

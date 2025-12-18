@@ -10,7 +10,7 @@ from src.lib.utils.response import DataResponse
 
 async def get_notification(id: ObjectId, db: Database, cache: Redis, user_id: str = None) -> DataResponse[Notification]:
     notification_collection = db.notifications
-    notification = await lazyload(cache, f'notification:{id}', loader=notification_collection.find_one, params={'_id': id})
+    notification = await lazyload(cache, f'notification:{id}', loader=notification_collection.find_one, params={'filter': {'_id': id}})
 
     if notification is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=f'Notification not found: {id}')

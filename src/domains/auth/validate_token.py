@@ -17,7 +17,7 @@ async def validate_token(token: str, db: Database, cache: Redis) -> CurrentUser:
         if email is None:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Token is invalid')
 
-        user = await lazyload(cache, f'user:{email}', loader=db.users.find_one, params={'email': email, 'hidden': False})
+        user = await lazyload(cache, f'user:{email}', loader=db.users.find_one, params={'filter': {'email': email, 'hidden': False}})
         if user is None:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'User not found')
 

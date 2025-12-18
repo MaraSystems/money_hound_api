@@ -21,6 +21,7 @@ class TestGetProfileEndpoint(TestFixture):
 		get_response = await async_client.get('/auth/profile', headers={'Authorization': f'Bearer {token}'})
 		assert get_response.status_code == 200
 		profile_data = get_response.json()
+		print(profile_data)
 		assert profile_data['data']['email'] == self.user_data.email
 
 

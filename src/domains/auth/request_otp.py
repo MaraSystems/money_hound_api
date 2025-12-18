@@ -13,7 +13,7 @@ from ...tasks.mailer import send_mail
 
 async def request_otp(payload: RequestOTP, db: Database, cache: Redis):
     user_collection = db.users
-    user = await lazyload(cache, f'user:{payload.email}', loader=user_collection.find_one, params={'email': payload.email, 'hidden': False})
+    user = await lazyload(cache, f'user:{payload.email}', loader=user_collection.find_one, params={'filter': {'email': payload.email, 'hidden': False}})
       
     if user is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, f'User not found: {payload.email}')

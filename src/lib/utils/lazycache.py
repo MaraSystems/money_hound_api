@@ -21,7 +21,7 @@ async def lazyload(cache: Redis, key: str, loader: Callable[[Any], Awaitable[Any
     if value is not None:
         return json.loads(value)
 
-    result = await loader(params)
+    result = await loader(**params)
     if result is not None:
         value = json.dumps(result, cls=EnhancedJSONEncoder)
         await cache.set(key, value, ex=expiry)

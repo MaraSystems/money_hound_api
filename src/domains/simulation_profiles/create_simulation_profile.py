@@ -9,7 +9,7 @@ from src.lib.utils.response import DataResponse
 
 async def create_simulation_profile(payload: CreateSimulationProfile, db: Database, cache: Redis) -> DataResponse[SimulationProfile]:
     simulation_profile_collection = db.simulation_profiles
-    existing = await lazyload(cache, f'simulation_profile:{payload.email}', loader=simulation_profile_collection.find_one, params={'email': payload.email, 'simulation_id': payload.simulation_id})
+    existing = await lazyload(cache, f'simulation_profile:{payload.email}', loader=simulation_profile_collection.find_one, params={'filter': {'email': payload.email, 'simulation_id': payload.simulation_id}})
 
     if existing is not None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f'Simulation Email not available: {payload.email}')

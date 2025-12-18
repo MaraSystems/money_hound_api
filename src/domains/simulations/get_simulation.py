@@ -10,7 +10,7 @@ from src.lib.utils.response import DataResponse
 
 async def get_simulation(id: ObjectId, db: Database, cache: Redis):
     simulation_collection = db.simulations
-    simulation = await lazyload(cache, f'simulation:{id}', loader=simulation_collection.find_one, params={'_id': id, 'hidden': False})
+    simulation = await lazyload(cache, f'simulation:{id}', loader=simulation_collection.find_one, params={'filter': {'_id': id, 'hidden': False}})
 
     if not simulation:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Simulation not found: {str(id)}')

@@ -15,13 +15,13 @@ async def create_simulation_transaction(payload: InitiateSimulationTransaction, 
     holder_account: SimulationAccount = await lazyload(
         cache, f'simulation_account:{payload.holder}:{payload.holder_bank}', 
         loader=simulation_account_collection.find_one, 
-        params={'account_no': payload.holder, 'bank_name': payload.holder_bank}
+        params={'filter': {'account_no': payload.holder, 'bank_name': payload.holder_bank}}
     )
 
     related_account: SimulationAccount = await lazyload(
         cache, f'simulation_account:{payload.related}:{payload.related_bank}', 
         loader=simulation_account_collection.find_one, 
-        params={'account_no': payload.related, 'bank_name': payload.related_bank}
+        params={'filter': {'account_no': payload.related, 'bank_name': payload.related_bank}}
     )
 
     reference = str(uuid4())

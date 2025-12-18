@@ -10,7 +10,7 @@ from src.lib.utils.response import DataResponse
 
 async def get_simulation_profile(id: ObjectId, db: Database, cache: Redis):
     simulation_profile_collection = db.simulation_profiles
-    profile = await lazyload(cache, f'simulation_profile:{id}', loader=simulation_profile_collection.find_one, params={'_id': id})
+    profile = await lazyload(cache, f'simulation_profile:{id}', loader=simulation_profile_collection.find_one, params={'filter': {'_id': id}})
 
     if not profile:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Simulation Profile not found: {str(id)}')

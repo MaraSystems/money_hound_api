@@ -11,7 +11,7 @@ async def create_simulation_account(payload: CreateSimulationAccount, db: Databa
     simulation_account_collection = db.simulation_accounts
     simulation_profile_collection = db.simulation_profiles
 
-    profile = await lazyload(cache, f'simulation_profile:{payload.bvn}', loader=simulation_profile_collection.find_one, params={'user_id': payload.bvn, 'simulation_id': payload.simulation_id})
+    profile = await lazyload(cache, f'simulation_profile:{payload.bvn}', loader=simulation_profile_collection.find_one, params={'filter': {'user_id': payload.bvn, 'simulation_id': payload.simulation_id}})
 
     if not profile:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Simulation Profile not found: {str(payload.bvn)}')

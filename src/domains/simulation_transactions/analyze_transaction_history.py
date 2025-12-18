@@ -1,11 +1,9 @@
 import pandas as pd
 
 from src.domains.simulation_transactions.hound_transaction import hound_transaction
-from src.domains.simulation_transactions.model import AnalyzedSimulationTransaction, SimulationTransaction, TransactionsAnalysis
+from src.domains.simulation_transactions.model import TransactionsAnalysis
 from src.lib.analytics.anomalizer import detect_fraud
 from src.lib.analytics.engineer import get_cashflow
-from src.lib.utils.lazycache import lazyload
-from src.lib.utils.response import DataResponse
 
 
 async def analyze_transaction_history(df: pd.DataFrame, accounts_df: pd.DataFrame, extract = [], filter_transactions = lambda df: df):

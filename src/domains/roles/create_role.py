@@ -9,7 +9,7 @@ from src.lib.utils.response import DataResponse
 
 async def create_role(payload: CreateRole, author_id: str, db: Database, cache: Redis) -> DataResponse[Role]:
     role_collection = db.roles
-    existing = await lazyload(cache, f'role:{payload.title}', loader=role_collection.find_one, params={'title': payload.title, 'hidden': False})
+    existing = await lazyload(cache, f'role:{payload.title}', loader=role_collection.find_one, params={'filter': {'title': payload.title, 'hidden': False}})
 
     if existing is not None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f'Role title not available: {payload.title}')

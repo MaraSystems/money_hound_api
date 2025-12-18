@@ -11,7 +11,7 @@ from src.lib.utils.response import DataResponse
 
 async def get_simulation_transaction(id: ObjectId, db: Database, cache: Redis):
     simulation_transaction_collection = db.simulation_transactions
-    transaction = await lazyload(cache, f'simulation_transaction:{id}', loader=simulation_transaction_collection.find_one, params={'_id': id})
+    transaction = await lazyload(cache, f'simulation_transaction:{id}', loader=simulation_transaction_collection.find_one, params={'filter': {'_id': id}})
 
     if not transaction:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Simulation Transaction not found: {str(id)}')

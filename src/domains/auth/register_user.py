@@ -13,7 +13,7 @@ from ...tasks.mailer import send_mail
 
 async def register_user(payload: CreateUser, db: Database, cache: Redis):
     user_collection = db.users
-    existing = await lazyload(cache, f'user:{payload.email}', loader=user_collection.find_one, params={'email': payload.email, 'hidden': False})
+    existing = await lazyload(cache, f'user:{payload.email}', loader=user_collection.find_one, params={'filter': {'email': payload.email, 'hidden': False}})
 
     if existing is not None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f'Email not available: {payload.email}')
