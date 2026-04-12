@@ -6,7 +6,7 @@ from redis.asyncio import Redis
 
 from src.domains.auth.model import CurrentUser
 from src.lib.utils.lazycache import lazyload
-from ...config import config
+from ...lib.utils import config
 
 
 async def validate_token(token: str, db: Database, cache: Redis) -> CurrentUser:

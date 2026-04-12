@@ -1,4 +1,4 @@
-import asyncio
+import asyncio, os
 import shutil
 import pytest
 import pytest_asyncio
@@ -7,13 +7,15 @@ from pymongo.database import Database
 from httpx import AsyncClient, ASGITransport
 from redis import asyncio as aioredis
 
-from src.config.config import ENV, UPLOAD_PATH
+from src.db.cache import get_cache
+from src.db.database import get_db
+from src.lib.utils.config import APP_NAME, MONGO_URL, REDIS_URL, UPLOAD_PATH
 from src.middlewares.limits import rate_limit
 from src.main import app
-from src.config.database import MONGO_URL, MONGO_DB, get_db
-from src.config.cache import REDIS_URL, get_cache
 
-db_name = f'{MONGO_DB}_test'
+
+
+db_name = f'{APP_NAME}_test'
 
 @pytest.fixture
 def event_loop():
@@ -53,10 +55,10 @@ async def override_dependency(test_db, test_cache):
     yield
     app.dependency_overrides.clear()
 
+
 @pytest.fixture
 async def async_client(test_db, test_cache):
     rate_limit.reset()
-
     transport = ASGITransport(app=app, root_path='')
 
     async with AsyncClient(transport=transport, base_url='http://test') as test_client:

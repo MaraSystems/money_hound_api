@@ -10,8 +10,8 @@ from src.domains.simulation_transactions.create_simulation_transaction import cr
 from src.domains.simulation_transactions.get_simulation_transaction import get_simulation_transaction
 from src.domains.simulation_transactions.list_simulation_transactions import list_simulation_transactions
 from src.models.simulation_transaction import AnalyzedSimulationTransaction, ListSimulationTransactions, SimulationTransaction, InitiateSimulationTransaction
-from src.config.cache import get_cache
-from src.config.database import get_db
+from src.db.cache import get_cache
+from src.db.database import get_db
 from src.lib.utils.response import DataResponse
 from src.middlewares.auth_guard import get_current_user
 

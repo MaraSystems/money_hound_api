@@ -5,7 +5,7 @@ from typing import Any, Callable, Awaitable
 
 from redis.asyncio import Redis
 
-from src.config.config import CACHE_TTL
+from src.lib.utils.config import CACHE_TTL
 
 class EnhancedJSONEncoder(json.JSONEncoder):
     def default(self, o):

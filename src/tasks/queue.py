@@ -2,7 +2,7 @@ from celery import Celery
 from celery.schedules import crontab
 from datetime import timedelta
 
-from .cache import REDIS_URL
+from ..db.cache import REDIS_URL
 
 celery_app = Celery('tasks', broker=f'{REDIS_URL}/1', backend=f'{REDIS_URL}/1')
 

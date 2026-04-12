@@ -1,6 +1,6 @@
 from src.lib.analytics import tracker
 from src.lib.store.load_data import load_data
-from config.config import BANK_DEVICES_CSV, ACCOUNTS_CSV, ANALYZED_TRANSACTIONS_CSV, ENGINEERED_TRANSACTIONS_CSV, LOCATION_CSV
+from src.lib.utils.config import BANK_DEVICES_CSV, ACCOUNTS_CSV, ANALYZED_TRANSACTIONS_CSV, ENGINEERED_TRANSACTIONS_CSV, LOCATION_CSV
 
 
 def list_accounts(exclude=''):

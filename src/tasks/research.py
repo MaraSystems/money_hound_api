@@ -1,7 +1,7 @@
 from src.agents.researcher.research_graph import get_research_graph
 from src.lib.utils.rag_pipeline import RAGPipeline
 
-from src.config.queue import celery_app
+from src.tasks.queue import celery_app
 
 research_graph = get_research_graph()
 

@@ -2,7 +2,7 @@ import pandas as pd
 import kagglehub
 import os
 
-from src.config.config import ENV, DATA_URL, DATA_DIR
+from src.lib.utils.config import ENV, DATA_URL, DATA_DIR
 
 def download_data(name: str):
     path = kagglehub.dataset_download(DATA_URL)

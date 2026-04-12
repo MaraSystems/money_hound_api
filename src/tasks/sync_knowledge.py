@@ -2,11 +2,11 @@ from pymongo.database import Database
 from langchain_core.documents import Document
 import asyncio
 
-from src.config.config import GOOGLE_COMPLIANCE_FOLDER_ID
-from src.config.queue import celery_app
+from src.lib.utils.config import GOOGLE_COMPLIANCE_FOLDER_ID
+from src.tasks.queue import celery_app
 
 from src.lib.store.google_drive import GoogleDrive
-from src.config.database import get_db
+from src.db.database import get_db
 from src.lib.utils.logger import get_logger
 from src.lib.utils.rag_pipeline import RAGPipeline
 

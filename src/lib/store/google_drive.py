@@ -4,7 +4,7 @@ from googleapiclient.http import MediaIoBaseDownload
 import io
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from src.config.config import GOOGLE_APPLICATION_CREDENTIALS
+from src.lib.utils.config import GOOGLE_APPLICATION_CREDENTIALS
 from src.lib.store.storage import Storage
 from src.lib.utils.logger import get_logger
 

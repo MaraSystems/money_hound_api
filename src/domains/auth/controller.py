@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query, Request
 from typing import Annotated
 from bson import ObjectId
 
-from src.config.cache import get_cache
+from src.db.cache import get_cache
 from src.domains.auth.get_profile import get_profile
 from .register_user import register_user
 from .request_otp import request_otp
@@ -12,9 +12,9 @@ from .delete_profile import delete_profile
 from ...models.user import User
 from ...middlewares.auth_guard import get_current_user
 from .model import CreateUser, RequestOTP, VerifyOTP, Token, UpdateProfile
-from ...config.database import get_db
+from ...db.database import get_db
 from ...lib.utils.response import DataResponse
-from ...config.config import REQUEST_LIMIT
+from ...lib.utils.config import REQUEST_LIMIT
 from ...middlewares.limits import rate_limit
 
 

@@ -1,7 +1,7 @@
 from redis import asyncio
 from redis.asyncio import Redis
 
-from .config import REDIS_URL
+from ..lib.utils.config import REDIS_URL
 
 redis_client: Redis = None
 

@@ -4,12 +4,12 @@ import os
 from logging.handlers import RotatingFileHandler
 import contextvars
 
-from src.config import config
+from src.lib.utils import config
 
 LOG_FORMAT = "[%(asctime)s] [%(levelname)s] [%(name)s] [%(request_id)s] - [%(message)s]"
 DATE_FORMAT = "%Y-%m-%d %H:%M%:%S"
 
-LOG_DIR = os.path.join(os.path.dirname(__file__), '../../logs')
+LOG_DIR = os.path.join(os.path.dirname(__file__), '../../../logs')
 LOG_DIR = os.path.abspath(LOG_DIR)
 LOG_FILE = os.path.join(LOG_DIR, 'app.log')
 ENV = config.ENV

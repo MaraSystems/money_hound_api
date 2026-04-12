@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from langchain_mongodb import MongoDBAtlasVectorSearch
 from pymongo import MongoClient
 
-from .config import MONGO_VECTOR_COLLECTION, MONGO_VECTOR_INDEX, VECTOR_URL, MONGO_DB
+from ..lib.utils.config import MONGO_VECTOR_COLLECTION, MONGO_VECTOR_INDEX, VECTOR_URL, MONGO_DB
 from .llms import get_embedding
 
 load_dotenv()

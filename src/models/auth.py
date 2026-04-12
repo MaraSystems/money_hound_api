@@ -5,7 +5,7 @@ from typing import Annotated, List, Optional
 
 from pymongo.database import Database
 
-from src.config.database import get_db
+from src.db.database import get_db
 from src.models.role import Role
 
 

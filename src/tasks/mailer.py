@@ -6,8 +6,8 @@ from jinja2 import Environment, FileSystemLoader
 import smtplib
 import os
 
-from src.config.queue import celery_app
-from src.config.config import MAIL_USER, MAIL_PASSWORD, APP_NAME, ENV, ENVIRONMENTS
+from src.tasks.queue import celery_app
+from src.lib.utils.config import MAIL_USER, MAIL_PASSWORD, APP_NAME, ENV, ENVIRONMENTS
 from src.lib.utils.logger import get_logger
 
 

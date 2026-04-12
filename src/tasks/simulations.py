@@ -4,10 +4,10 @@ from redis.asyncio import Redis
 from pymongo.database import Database
 from bson import ObjectId
 
-from src.config.cache import get_cache
-from src.config.config import UPLOAD_PATH
-from src.config.database import get_db
-from src.config.queue import celery_app
+from src.db.cache import get_cache
+from src.lib.utils.config import UPLOAD_PATH
+from src.db.database import get_db
+from src.tasks.queue import celery_app
 from src.models.simulation_account import CreateSimulationAccount
 from src.models.simulation_devices import CreateSimulationDevice
 from src.models.simulation_profile import CreateSimulationProfile
@@ -18,7 +18,7 @@ from src.lib.simulation.simulator import Simulator
 from src.lib.utils.lazycache import lazyload
 from src.lib.utils.logger import get_logger
 from src.tasks.mailer import send_mail
-from src.config.config import ENV, ENVIRONMENTS
+from src.lib.utils.config import ENV, ENVIRONMENTS
 
 
 async def run_simulation(payload: Simulation, user_id: str, db: Database, cache: Redis):

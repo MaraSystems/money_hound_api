@@ -2,7 +2,7 @@ from pymongo.database import Database
 from fastapi import HTTPException, status
 from redis.asyncio import Redis
 
-from src.config.config import APP_NAME
+from src.lib.utils.config import APP_NAME
 from src.lib.utils.lazycache import lazyload
 
 from .model import CreateUser

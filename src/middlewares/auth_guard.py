@@ -2,9 +2,9 @@ from fastapi import Depends, HTTPException, status
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.requests import Request
 
-from src.config.cache import get_cache
+from src.db.cache import get_cache
 
-from ..config.database import get_db
+from ..db.database import get_db
 from ..domains.auth.validate_token import validate_token
 
 

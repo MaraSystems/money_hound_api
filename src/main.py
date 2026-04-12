@@ -7,7 +7,7 @@ from .middlewares.error_handler import http_exception_handler, response_exceptio
 from .middlewares.requests_logger import RequestLoggingMiddleware
 from .lib.utils.response import DataResponse
 from .router import register_routes
-from .config import config
+from .lib.utils import config
 from .lib.utils.logger import get_logger
 
 logger = get_logger('app')

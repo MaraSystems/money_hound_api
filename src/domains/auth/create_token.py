@@ -1,7 +1,7 @@
 import jwt
 from datetime import datetime, timedelta
 
-from ...config import config
+from ...lib.utils import config
 from .model import TokenData
 
 def create_token(data: TokenData, life_span: int = config.CACHE_TTL):

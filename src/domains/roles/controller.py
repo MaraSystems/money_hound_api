@@ -3,11 +3,11 @@ from typing import Annotated
 from bson import ObjectId
 from typing import List
 
-from src.config.cache import get_cache
+from src.db.cache import get_cache
 from src.middlewares.role_guard import require_permission
 
 
-from ...config.database import get_db
+from ...db.database import get_db
 from .create_role import create_role
 from .delete_role import delete_role
 from .update_role import update_role

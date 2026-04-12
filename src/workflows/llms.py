@@ -2,7 +2,7 @@ from langchain_ollama import ChatOllama, OllamaEmbeddings
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from dotenv import load_dotenv
 
-from src.config.config import ENV, ENVIRONMENTS, OLLAMA_BASE_URL
+from src.lib.utils.config import ENV, ENVIRONMENTS, OLLAMA_BASE_URL
 
 load_dotenv()
 

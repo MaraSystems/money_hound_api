@@ -5,8 +5,8 @@ from pymongo.database import Database
 from datetime import datetime
 
 from ..store.google_drive import GoogleDrive
-from src.config.config import MONGO_VECTOR_COLLECTION
-from src.config.vector_store import get_vector_store
+from src.lib.utils.config import MONGO_VECTOR_COLLECTION
+from src.workflows.vector_store import get_vector_store
 from src.lib.utils.logger import get_logger
 
 

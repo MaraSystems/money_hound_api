@@ -11,8 +11,8 @@ from src.domains.simulation_accounts.create_simulation_account import create_sim
 from src.domains.simulation_accounts.get_simulation_account import get_simulation_account
 from src.domains.simulation_accounts.list_simulation_accounts import list_simulation_accounts
 from src.models.simulation_account import CreateSimulationAccount, ListSimulationAccounts, SimulationAccount
-from src.config.cache import get_cache
-from src.config.database import get_db
+from src.db.cache import get_cache
+from src.db.database import get_db
 from src.models.simulation_transaction import TransactionsAnalysis
 from src.lib.utils.response import DataResponse
 from src.middlewares.auth_guard import get_current_user

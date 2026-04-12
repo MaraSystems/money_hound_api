@@ -12,8 +12,8 @@ from src.domains.simulations.get_simulation import get_simulation
 from src.domains.simulations.list_simulations import list_simulations
 from src.domains.simulations.model import CreateSimulation, Simulation, ListSimulations, UpdateSimulation
 from src.domains.simulations.create_simulation import create_simulation
-from src.config.cache import get_cache
-from src.config.database import get_db
+from src.db.cache import get_cache
+from src.db.database import get_db
 from src.domains.simulations.update_simulation import update_simulation
 from src.lib.utils.response import DataResponse
 from src.middlewares.auth_guard import get_current_user
