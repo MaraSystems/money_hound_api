@@ -1,7 +1,7 @@
 from pymongo.database import Database
 
 from src.lib.utils.pagination import sort_mapping
-from .model import ListRoles, Role
+from ...models.role import ListRoles, Role
 from src.lib.utils.response import DataResponse
 
 

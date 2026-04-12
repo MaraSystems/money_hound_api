@@ -3,7 +3,7 @@ from fastapi import HTTPException, status
 from pymongo.database import Database
 from redis.asyncio import Redis
 
-from src.domains.notifications.model import Notification
+from src.models.notification import Notification
 from src.lib.utils.lazycache import lazyload
 from src.lib.utils.response import DataResponse
 

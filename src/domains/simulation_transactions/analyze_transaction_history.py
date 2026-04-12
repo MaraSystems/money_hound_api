@@ -1,7 +1,7 @@
 import pandas as pd
 
 from src.domains.simulation_transactions.hound_transaction import hound_transaction
-from src.domains.simulation_transactions.model import AnalyzedSimulationTransaction, SimulationTransaction, TransactionsAnalysis
+from src.models.simulation_transaction import AnalyzedSimulationTransaction, SimulationTransaction, TransactionsAnalysis
 from src.lib.analytics.anomalizer import detect_fraud
 from src.lib.analytics.engineer import get_cashflow
 from src.lib.utils.lazycache import lazyload

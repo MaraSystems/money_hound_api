@@ -5,9 +5,9 @@ import pytest
 
 from src.domains.auth.delete_profile import delete_profile
 from src.domains.auth.model import CreateUser
-from src.domains.roles.model import CreateRole
+from src.models.role import CreateRole
 from src.domains.users.list_users import list_users
-from src.domains.users.model import ListUsers
+from src.models.user import ListUsers
 from tests.fixture_spec import TestFixture
 
 

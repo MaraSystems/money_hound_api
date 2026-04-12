@@ -6,9 +6,9 @@ from src.lib.utils.base_entity import BaseEntity
 from src.lib.utils.pagination import Page
 
 
-class CreateSimulationBankDevice(BaseModel):
+class CreateSimulationDevice(BaseModel):
     device_id: str = Field(..., description="The id of the device")
-    bank_name: str = Field(..., description="The bank that owns the device")
+    name: str = Field(..., description="The that owns the device")
     latitude: float = Field(..., description="The latitude of the device location")
     longitude: float = Field(..., description="The longitude of the device location")
     simulation_id: str = Field(..., description="The id of the simulation")
@@ -25,13 +25,13 @@ class CreateSimulationBankDevice(BaseModel):
         return datetime.now()
 
 
-class SimulationBankDevice(BaseEntity):
+class SimulationDevice(BaseEntity):
     device_id: str = Field(..., description="The id of the device")
-    bank_name: str = Field(..., description="The bank that owns the device")
+    name: str = Field(..., description="The that owns the device")
     latitude: float = Field(..., description="The latitude of the device location")
     longitude: float = Field(..., description="The longitude of the device location")
     simulation_id: str = Field(..., description="The id of the simulation")
     
 
-class ListSimulationBankDevices(Page):
+class ListSimulationDevices(Page):
     simulation_id: str = Field(..., description="The id of the simulation")

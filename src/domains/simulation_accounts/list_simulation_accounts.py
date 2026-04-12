@@ -1,7 +1,7 @@
 from typing import List
 
 from pymongo.database import Database
-from src.domains.simulation_accounts.model import ListSimulationAccounts, SimulationAccount
+from src.models.simulation_account import ListSimulationAccounts, SimulationAccount
 from src.lib.utils.pagination import sort_mapping
 from src.lib.utils.response import DataResponse
 

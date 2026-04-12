@@ -4,8 +4,8 @@ from pymongo.database import Database
 from redis.asyncio import Redis
 
 from src.domains.roles.get_role import get_role
-from src.domains.roles.model import Role, UpdateRole
-from src.domains.users.model import User
+from src.models.role import Role, UpdateRole
+from src.models.user import User
 from src.lib.utils.response import DataResponse
 
 

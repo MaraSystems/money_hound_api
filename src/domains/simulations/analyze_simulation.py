@@ -8,7 +8,7 @@ from bson import ObjectId
 from redis.asyncio import Redis
 
 from src.domains.simulation_transactions.analyze_transaction_history import analyze_transaction_history
-from src.domains.simulation_transactions.model import TransactionsAnalysis
+from src.models.simulation_transaction import TransactionsAnalysis
 from src.domains.simulations.get_simulation import get_simulation
 from src.lib.utils.response import DataResponse
 

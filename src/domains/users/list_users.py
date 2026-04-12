@@ -1,5 +1,5 @@
 from src.lib.utils.pagination import sort_mapping
-from .model import ListUsers
+from ...models.user import ListUsers
 from pymongo.database import Database
 
 from ...lib.utils.response import DataResponse

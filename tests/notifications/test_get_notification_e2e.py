@@ -5,9 +5,9 @@ from bson import ObjectId
 import pytest
 
 from src.domains.notifications.notify_user import notify_user
-from src.domains.notifications.model import CreateNotification
-from src.domains.roles.model import CreateRole
-from src.domains.users.model import User
+from src.models.notification import CreateNotification
+from src.models.role import CreateRole
+from src.models.user import User
 from tests.fixture_spec import TestFixture
 
 

@@ -9,7 +9,7 @@ from src.domains.auth.model import CurrentUser
 from src.domains.notifications.create_notification import create_notification
 from src.domains.notifications.get_notification import get_notification
 from src.domains.notifications.list_notifications import list_notification
-from src.domains.notifications.model import CreateNotification, ListNotifications, Notification
+from src.models.notification import CreateNotification, ListNotifications, Notification
 from src.domains.notifications.read_notification import read_notification
 from src.lib.utils.response import DataResponse
 from src.middlewares.auth_guard import get_current_user

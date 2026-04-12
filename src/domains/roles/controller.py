@@ -17,7 +17,7 @@ from .list_roles import list_roles as fetch_roles
 from .unassign_role import unassign_role
 from .assign_role import assign_role
 
-from .model import CreateRole, Domain, ListRoles, Role, UpdateRole
+from ...models.role import CreateRole, Domain, ListRoles, Role, UpdateRole
 from ...lib.utils.response import DataResponse
 from ...middlewares.auth_guard import get_current_user
 

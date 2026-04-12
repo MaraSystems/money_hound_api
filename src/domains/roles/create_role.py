@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from pymongo.database import Database
 from redis.asyncio import Redis
 
-from src.domains.roles.model import CreateRole, Role
+from src.models.role import CreateRole, Role
 from src.lib.utils.lazycache import lazyload
 from src.lib.utils.response import DataResponse
 

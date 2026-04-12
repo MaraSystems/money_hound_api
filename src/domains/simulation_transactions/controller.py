@@ -9,7 +9,7 @@ from src.domains.auth.model import CurrentUser
 from src.domains.simulation_transactions.create_simulation_transaction import create_simulation_transaction
 from src.domains.simulation_transactions.get_simulation_transaction import get_simulation_transaction
 from src.domains.simulation_transactions.list_simulation_transactions import list_simulation_transactions
-from src.domains.simulation_transactions.model import AnalyzedSimulationTransaction, ListSimulationTransactions, SimulationTransaction, InitiateSimulationTransaction
+from src.models.simulation_transaction import AnalyzedSimulationTransaction, ListSimulationTransactions, SimulationTransaction, InitiateSimulationTransaction
 from src.config.cache import get_cache
 from src.config.database import get_db
 from src.lib.utils.response import DataResponse

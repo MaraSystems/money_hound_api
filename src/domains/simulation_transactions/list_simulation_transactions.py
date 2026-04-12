@@ -1,7 +1,7 @@
 from typing import List
 
 from pymongo.database import Database
-from src.domains.simulation_transactions.model import ListSimulationTransactions, SimulationTransaction
+from src.models.simulation_transaction import ListSimulationTransactions, SimulationTransaction
 from src.lib.utils.pagination import sort_mapping
 from src.lib.utils.response import DataResponse
 

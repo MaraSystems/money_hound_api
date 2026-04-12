@@ -5,7 +5,7 @@ from redis.asyncio import Redis
 
 from src.lib.utils.lazycache import lazyload
 
-from ...domains.users.model import User
+from ...models.user import User
 from ...lib.utils.response import DataResponse
 
 

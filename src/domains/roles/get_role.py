@@ -3,7 +3,7 @@ from pymongo.database import Database
 from bson import ObjectId
 from redis.asyncio import Redis
 
-from src.domains.roles.model import Role
+from src.models.role import Role
 from src.lib.utils.lazycache import lazyload
 from src.lib.utils.response import DataResponse
 

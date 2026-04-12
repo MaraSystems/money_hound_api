@@ -5,5 +5,8 @@ __pycache__
 logs
 secrets
 datasets
+vectors
 uploads
-models
+uploads_DEVELOPMENT
+.data_simulated.lock
+claude.log

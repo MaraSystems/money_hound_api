@@ -7,14 +7,11 @@ from pymongo.database import Database
 from httpx import AsyncClient, ASGITransport
 from redis import asyncio as aioredis
 
-from src.graphs.taxq import get_taxq_graph
 from src.config.config import ENV, UPLOAD_PATH
 from src.middlewares.limits import rate_limit
 from src.main import app
 from src.config.database import MONGO_URL, MONGO_DB, get_db
 from src.config.cache import REDIS_URL, get_cache
-from tests.fakes import FakeAgent
-
 
 db_name = f'{MONGO_DB}_test'
 
@@ -49,23 +46,15 @@ async def clean_up():
 
 
 @pytest_asyncio.fixture(autouse=True)
-async def override_dependency(test_db, test_agent, test_cache):
+async def override_dependency(test_db, test_cache):
     app.dependency_overrides[get_db] = lambda: test_db
-    app.dependency_overrides[get_taxq_graph] = lambda: test_agent
     app.dependency_overrides[get_cache] = lambda: test_cache
 
     yield
     app.dependency_overrides.clear()
 
-
 @pytest.fixture
-def test_agent():
-    agent = FakeAgent()
-    yield agent
-
-
-@pytest.fixture
-async def async_client(test_db, test_agent, test_cache):
+async def async_client(test_db, test_cache):
     rate_limit.reset()
 
     transport = ASGITransport(app=app, root_path='')

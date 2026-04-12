@@ -9,7 +9,7 @@ from redis.asyncio import Redis
 
 from src.domains.simulation_accounts.get_simulation_account import get_simulation_account
 from src.domains.simulation_transactions.analyze_transaction_history import analyze_transaction_history
-from src.domains.simulation_transactions.model import TransactionsAnalysis
+from src.models.simulation_transaction import TransactionsAnalysis
 from src.lib.utils.response import DataResponse
 
 

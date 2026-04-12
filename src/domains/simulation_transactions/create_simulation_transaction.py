@@ -2,8 +2,8 @@ from uuid import uuid4
 from pymongo.database import Database
 from redis.asyncio import Redis
 
-from src.domains.simulation_accounts.model import SimulationAccount
-from src.domains.simulation_transactions.model import InitiateSimulationTransaction, AnalyzedSimulationTransaction
+from src.models.simulation_account import SimulationAccount
+from src.models.simulation_transaction import InitiateSimulationTransaction, AnalyzedSimulationTransaction
 from src.domains.simulation_transactions.transact import credit_account, debit_account
 from src.lib.utils.lazycache import lazyload
 from src.lib.utils.response import DataResponse

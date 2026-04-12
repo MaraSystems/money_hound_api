@@ -4,7 +4,7 @@ from bson import ObjectId
 from redis.asyncio import Redis
 
 from src.domains.simulation_transactions.hound_transaction import hound_transaction
-from src.domains.simulation_transactions.model import AnalyzedSimulationTransaction, SimulationTransaction
+from src.models.simulation_transaction import AnalyzedSimulationTransaction, SimulationTransaction
 from src.lib.utils.lazycache import lazyload
 from src.lib.utils.response import DataResponse
 

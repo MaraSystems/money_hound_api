@@ -1,6 +1,6 @@
 from typing import List
 
-from src.domains.roles.model import Domain
+from src.models.role import Domain
 from src.lib.utils.response import DataResponse
 
 

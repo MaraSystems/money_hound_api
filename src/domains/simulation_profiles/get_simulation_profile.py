@@ -3,7 +3,7 @@ from pymongo.database import Database
 from bson import ObjectId
 from redis.asyncio import Redis
 
-from src.domains.simulation_profiles.model import SimulationProfile
+from src.models.simulation_profile import SimulationProfile
 from src.lib.utils.lazycache import lazyload
 from src.lib.utils.response import DataResponse
 

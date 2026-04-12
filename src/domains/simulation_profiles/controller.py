@@ -10,10 +10,10 @@ from src.domains.simulation_profiles.analyze_simulation_profile import analyze_s
 from src.domains.simulation_profiles.create_simulation_profile import create_simulation_profile
 from src.domains.simulation_profiles.get_simulation_profile import get_simulation_profile
 from src.domains.simulation_profiles.list_simulation_profiles import list_simulation_profiles
-from src.domains.simulation_profiles.model import CreateSimulationProfile, ListSimulationProfiles, SimulationProfile
+from src.models.simulation_profile import CreateSimulationProfile, ListSimulationProfiles, SimulationProfile
 from src.config.cache import get_cache
 from src.config.database import get_db
-from src.domains.simulation_transactions.model import TransactionsAnalysis
+from src.models.simulation_transaction import TransactionsAnalysis
 from src.lib.utils.response import DataResponse
 from src.middlewares.auth_guard import get_current_user
 

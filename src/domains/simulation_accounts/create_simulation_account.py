@@ -2,7 +2,7 @@ from pymongo.database import Database
 from redis.asyncio import Redis
 from fastapi import status, HTTPException
 
-from src.domains.simulation_accounts.model import SimulationAccount, CreateSimulationAccount
+from src.models.simulation_account import SimulationAccount, CreateSimulationAccount
 from src.lib.utils.lazycache import lazyload
 from src.lib.utils.response import DataResponse
 

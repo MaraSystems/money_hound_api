@@ -6,7 +6,7 @@ from pymongo.database import Database
 from bson import ObjectId
 
 from src.domains.notifications.create_notification import create_notification
-from src.domains.notifications.model import CreateNotification, Notification
+from src.models.notification import CreateNotification, Notification
 from src.lib.utils.response import DataResponse
 from tests.fixture_spec import TestFixture
 

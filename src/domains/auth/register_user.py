@@ -6,7 +6,7 @@ from src.config.config import APP_NAME
 from src.lib.utils.lazycache import lazyload
 
 from .model import CreateUser
-from ..users.model import User
+from ...models.user import User
 from ...lib.utils.response import DataResponse
 from ...tasks.mailer import send_mail
 

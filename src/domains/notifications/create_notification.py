@@ -1,6 +1,6 @@
 from pymongo.database import Database
 
-from src.domains.notifications.model import CreateNotification
+from src.models.notification import CreateNotification
 from src.lib.utils.response import DataResponse
 
 

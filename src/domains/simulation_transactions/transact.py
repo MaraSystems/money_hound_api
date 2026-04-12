@@ -2,10 +2,10 @@ from fastapi import HTTPException, status
 from pymongo.database import Database
 from redis.asyncio import Redis
 
-from src.domains.simulation_accounts.model import SimulationAccount
+from src.models.simulation_account import SimulationAccount
 from src.domains.simulation_transactions.hound_transaction import hound_transaction
 from src.domains.simulation_transactions.get_simulation_transaction import get_simulation_transaction
-from src.domains.simulation_transactions.model import CreateSimulationTransaction, InitiateSimulationTransaction, SimulationTransaction
+from src.models.simulation_transaction import CreateSimulationTransaction, InitiateSimulationTransaction, SimulationTransaction
 
 
 async def debit_account(holder_account: SimulationAccount, related_account: SimulationAccount, payload: InitiateSimulationTransaction, reference: str, db: Database, cache: Redis):

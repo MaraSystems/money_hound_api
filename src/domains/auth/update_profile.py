@@ -6,7 +6,7 @@ from redis.asyncio import Redis
 from src.domains.auth.get_profile import get_profile
 
 from ...domains.auth.model import UpdateProfile
-from ...domains.users.model import User
+from ...models.user import User
 from ...lib.utils.response import DataResponse
 
 

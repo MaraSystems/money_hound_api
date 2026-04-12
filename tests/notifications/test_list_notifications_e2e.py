@@ -6,7 +6,7 @@ from freezegun import freeze_time
 
 from src.domains.notifications.create_notification import create_notification
 from src.domains.notifications.list_notifications import list_notification
-from src.domains.notifications.model import CreateNotification, ListNotifications
+from src.models.notification import CreateNotification, ListNotifications
 from src.domains.notifications.notify_user import notify_user
 from tests.fixture_spec import TestFixture
 

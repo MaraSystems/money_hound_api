@@ -3,7 +3,7 @@ from pymongo.database import Database
 import pytest
 
 from src.domains.auth.model import CreateUser
-from src.domains.roles.model import CreateRole
+from src.models.role import CreateRole
 from tests.fixture_spec import TestFixture
 
 

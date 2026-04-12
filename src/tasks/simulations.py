@@ -8,12 +8,12 @@ from src.config.cache import get_cache
 from src.config.config import UPLOAD_PATH
 from src.config.database import get_db
 from src.config.queue import celery_app
-from src.domains.simulation_accounts.model import CreateSimulationAccount
-from src.domains.simulation_bank_devices.model import CreateSimulationBankDevice
-from src.domains.simulation_profiles.model import CreateSimulationProfile
+from src.models.simulation_account import CreateSimulationAccount
+from src.models.simulation_devices import CreateSimulationDevice
+from src.models.simulation_profile import CreateSimulationProfile
 from src.domains.simulations.model import Simulation
-from src.domains.simulation_transactions.model import CreateSimulationTransaction
-from src.domains.users.model import User
+from src.models.simulation_transaction import CreateSimulationTransaction
+from src.models.user import User
 from src.lib.simulation.simulator import Simulator
 from src.lib.utils.lazycache import lazyload
 from src.lib.utils.logger import get_logger
@@ -70,7 +70,7 @@ async def save_simulation(payload: Simulation, user_id: str, sim: Simulator, db:
     await simulation_transaction_collection.insert_many(transactions)
 
     bank_devices = prepare_data(sim.generated_data, payload, 'bank_devices')
-    bank_devices = [CreateSimulationBankDevice(**item).model_dump() for item in bank_devices]
+    bank_devices = [CreateSimulationDevice(**item).model_dump() for item in bank_devices]
     simulation_bank_devices_collection = db.simulation_bank_devices 
     await simulation_bank_devices_collection.insert_many(bank_devices)
 

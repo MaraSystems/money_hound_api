@@ -5,10 +5,9 @@ import pytest
 from redis import Redis
 
 from src.domains.auth.model import CreateUser, TokenData
-from src.domains.notifications.model import CreateNotification
-from src.domains.roles.model import CreateRole
+from src.models.notification import CreateNotification
+from src.models.role import CreateRole
 from src.domains.auth.create_token import create_token
-from src.domains.bot.model import CreateChat
 from src.domains.simulations.model import CreateSimulation
 from src.tasks.simulations import run_simulation
 
@@ -30,10 +29,6 @@ class TestFixture:
         subject='Sample',
         message='Welcome message',
         category='message'
-    )
-
-    chat_data = CreateChat(
-        message='Hello'
     )
 
     simulation_data = CreateSimulation(

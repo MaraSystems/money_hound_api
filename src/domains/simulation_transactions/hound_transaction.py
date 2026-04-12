@@ -3,7 +3,7 @@ from pymongo.database import Database
 from pandas import DataFrame
 from pymongo import DESCENDING
 
-from src.domains.simulation_transactions.model import InitiateSimulationTransaction, SimulationTransaction
+from src.models.simulation_transaction import InitiateSimulationTransaction, SimulationTransaction
 from src.lib.analytics.extractor import extract_account_features, extract_frequency_features, extract_money_features, extract_time_features, extract_location_features, extract_bounds, extract_holder_bvn_occurance, extract_holder_occurance, extract_related_bvn_occurance, extract_related_occurance, extract_rolling_averages
 from src.lib.analytics.anomalizer import check_unusual, detect_fraud
 

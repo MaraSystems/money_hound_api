@@ -3,7 +3,7 @@ from bson import ObjectId
 from pymongo.database import Database
 
 from src.lib.utils.pagination import sort_mapping
-from .model import ListNotifications, Notification
+from ...models.notification import ListNotifications, Notification
 from src.lib.utils.response import DataResponse
 
 

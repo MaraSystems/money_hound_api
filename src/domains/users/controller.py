@@ -10,7 +10,7 @@ from src.middlewares.role_guard import require_permission
 from ...middlewares.auth_guard import get_current_user
 from ...lib.utils.response import DataResponse
 from ...config.database import get_db
-from .model import User, ListUsers
+from ...models.user import User, ListUsers
 
 user_router = APIRouter(prefix='/users')
 
