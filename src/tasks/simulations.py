@@ -71,8 +71,8 @@ async def save_simulation(payload: Simulation, user_id: str, sim: Simulator, db:
 
     bank_devices = prepare_data(sim.generated_data, payload, 'bank_devices')
     bank_devices = [CreateSimulationDevice(**item).model_dump() for item in bank_devices]
-    simulation_bank_devices_collection = db.simulation_bank_devices 
-    await simulation_bank_devices_collection.insert_many(bank_devices)
+    simulation_devices_collection = db.simulation_devices 
+    await simulation_devices_collection.insert_many(bank_devices)
 
     profiles = prepare_data(sim.generated_data, payload, 'profiles')
     profiles = [CreateSimulationProfile(**item).model_dump() for item in profiles]

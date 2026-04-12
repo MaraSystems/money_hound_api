@@ -189,7 +189,7 @@ async def random_atm(bank_devices: pd.DataFrame, lat, lon):
         'device_id': bank_device['device_id'],
         'account_no': bank_device['device_id'],
         'bvn': bank_device['device_id'],
-        'bank_name': bank_device['bank_name'],
+        'owner': bank_device['owner'],
     }
 
 

@@ -63,7 +63,7 @@ class Events:
 
         # Set the related party of this transaction (The holder's bank)
         related = bank_device['account_no']
-        related_bank = bank_device['bank_name']
+        related_bank = bank_device['owner']
 
         # Get the bank of the holder
         bank_of_holder: Bank = self.banks[holder['bank_name']]
@@ -102,7 +102,7 @@ class Events:
 
         # Set the related party of this transaction (The holder's bank)
         related = bank_device['account_no']
-        related_bank = bank_device['bank_name']
+        related_bank = bank_device['owner']
 
         # Get the bank of the holder
         bank_of_holder: Bank = self.banks[holder['bank_name']]

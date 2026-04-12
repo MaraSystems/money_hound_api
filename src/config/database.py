@@ -17,7 +17,7 @@ async def get_db():
     db.simulations.create_index([('author_id', 1)])
     db.simulation_transactions.create_index([('holder', 1), ('holder_bank', 1), ('reference', 1)])
     db.simulation_profiles.create_index([('user_id', 1), ('user_name', 1), ('name', 1), ('email', 1)])
-    db.simulation_bank_devices.create_index([('bank_name', 1), ('device_id', 1)])
+    db.simulation_devices.create_index([('owner', 1), ('device_id', 1)])
     db.simulation_accounts.create_index([('account_no', 1), ('bank_name', 1), ('account_name', 1)])
 
 

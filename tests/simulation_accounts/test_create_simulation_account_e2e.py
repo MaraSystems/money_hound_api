@@ -12,11 +12,11 @@ class TestCreateSimulationAccountEndpoint(TestFixture):
         await self._set_up(test_db)
         simulation = await self._create_simulation(test_db, test_cache)
         user = await test_db.simulation_profiles.find_one({'simulation_id': simulation['_id']})
-        bank_device = await test_db.simulation_bank_devices.find_one({'simulation_id': simulation['_id']})
+        bank_device = await test_db.simulation_devices.find_one({'simulation_id': simulation['_id']})
 
         simulation_account_data = {
             'account_name': user['name'],
-            'bank_name': bank_device['bank_name'],
+            'bank_name': bank_device['owner'],
             'balance': 100000,
             'kyc': 3,
             'bvn': user['user_id'],
@@ -44,11 +44,11 @@ class TestCreateSimulationAccountEndpoint(TestFixture):
         await self._set_up(test_db)
         simulation = await self._create_simulation(test_db, test_cache)
         user = await test_db.simulation_profiles.find_one({'simulation_id': simulation['_id']})
-        bank_device = await test_db.simulation_bank_devices.find_one({'simulation_id': simulation['_id']})
+        bank_device = await test_db.simulation_devices.find_one({'simulation_id': simulation['_id']})
 
         simulation_account_data = {
             'account_name': user['name'],
-            'bank_name': bank_device['bank_name'],
+            'bank_name': bank_device['owner'],
             'balance': 100000,
             'kyc': 3,
             'bvn': 'random_bvn',
@@ -72,11 +72,11 @@ class TestCreateSimulationAccountEndpoint(TestFixture):
         await self._set_up(test_db)
         simulation = await self._create_simulation(test_db, test_cache)
         user = await test_db.simulation_profiles.find_one({'simulation_id': simulation['_id']})
-        bank_device = await test_db.simulation_bank_devices.find_one({'simulation_id': simulation['_id']})
+        bank_device = await test_db.simulation_devices.find_one({'simulation_id': simulation['_id']})
 
         simulation_account_data = {
             'account_name': 'Random Name',
-            'bank_name': bank_device['bank_name'],
+            'bank_name': bank_device['owner'],
             'balance': 100000,
             'kyc': 3,
             'bvn': user['user_id'],
@@ -100,10 +100,10 @@ class TestCreateSimulationAccountEndpoint(TestFixture):
         await self._set_up(test_db)
         simulation = await self._create_simulation(test_db, test_cache)
         user = await test_db.simulation_profiles.find_one({'simulation_id': simulation['_id']})
-        bank_device = await test_db.simulation_bank_devices.find_one({'simulation_id': simulation['_id']})
+        bank_device = await test_db.simulation_devices.find_one({'simulation_id': simulation['_id']})
 
         simulation_account_data = {
-            'bank_name': bank_device['bank_name'],
+            'bank_name': bank_device['owner'],
             'balance': 100000,
             'kyc': 3,
             'bvn': user['user_id'],

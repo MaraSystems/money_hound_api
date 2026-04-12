@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field, computed_field
 from src.lib.utils.base_entity import BaseEntity
 from src.lib.utils.pagination import Page
 
+SimulationStatus = Literal['PENDING', 'COMPLETE', 'FAILED']
 
 class CreateSimulation(BaseModel):
     num_banks: int = Field(..., description="The number of banks")
@@ -20,7 +21,7 @@ class CreateSimulation(BaseModel):
 
     @computed_field
     @property
-    def status(self) -> Literal['PENDING', 'COMPLETE', 'FAILED']:
+    def status(self) -> SimulationStatus:
         return 'PENDING'
 
     @computed_field
@@ -48,7 +49,7 @@ class Simulation(BaseEntity):
     min_amount: float = Field(..., description="The min amount to be generated")
     max_amount: float = Field(..., description="The maximium amount to be generated")
     author_id: str = Field(..., description="Unique identifier of the author who created the simulation")
-    status: Literal['PENDING', 'COMPLETE', 'FAILED'] = Field(..., description="The status of the simulation")
+    status: SimulationStatus = Field(..., description="The status of the simulation")
     days: float = Field(..., description="The number of days to simulate")
 
 class ListSimulations(Page):

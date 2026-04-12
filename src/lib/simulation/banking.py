@@ -7,6 +7,7 @@ import asyncio
 from src.lib.simulation.generator import random_location
 from src.lib.simulation.generator import generate_amount
 from src.lib.simulation.clock import global_clock
+from src.models.simulation_devices import CreateSimulationDevice, DeviceType
 
 
 class Bank:
@@ -44,13 +45,14 @@ class Bank:
 
         # Set a unique identifier for the device
         device_id = f"ATM_{self.name}_{uuid4()}"
-
         # Set device details
-        device = {
-            'device_id': device_id,
-            'bank_name': self.name,
-            **location
-        }
+        device = CreateSimulationDevice(
+            device_id=device_id,
+            owner=self.name,
+            type='ATM',
+            latitude=location['latitude'],
+            longitude=location['longitude'],
+        ).model_dump()
 
         self.devices = pd.concat([self.devices, pd.DataFrame([device])])
         return device

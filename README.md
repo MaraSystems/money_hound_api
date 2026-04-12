@@ -288,8 +288,8 @@ Track banking devices and connections.
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| GET | `/simulation_bank_devices` | List bank devices | ✅ |
-| GET | `/simulation_bank_devices/{id}` | Get specific device | ✅ |
+| GET | `/simulation_devices` | List bank devices | ✅ |
+| GET | `/simulation_devices/{id}` | Get specific device | ✅ |
 
 ## Features
 
