@@ -1,4 +1,3 @@
-from bson import ObjectId
 from httpx import AsyncClient
 from pymongo.database import Database
 import pytest
@@ -6,8 +5,6 @@ import pytest
 from src.domains.auth.delete_profile import delete_profile
 from src.domains.auth.model import CreateUser
 from src.models.role import CreateRole
-from src.domains.users.list_users import list_users
-from src.models.user import ListUsers
 from tests.fixture_spec import TestFixture
 
 
