@@ -5,8 +5,9 @@ from redis.asyncio import Redis
 
 from src.domains.simulations.get_simulation import get_simulation
 from src.domains.simulations.model import Simulation, UpdateSimulation
+from src.lib.task.run_task import run_task
 from src.lib.utils.response import DataResponse
-from src.tasks.simulations import simulator
+from src.tasks.run_simulation import run_simulation_task
 
 
 async def update_simulation(id: ObjectId, payload: UpdateSimulation, user_id: str, db: Database, cache: Redis) -> DataResponse[Simulation]:
@@ -23,5 +24,11 @@ async def update_simulation(id: ObjectId, payload: UpdateSimulation, user_id: st
     updated = await get_simulation(id, db, cache)
     updated_data = updated.data.model_dump(exclude=['id'])
     updated_data['_id'] = updated.data.id
-    simulator.delay(updated_data, user_id)
+    run_task(
+        run_simulation_task,
+        kwargs={
+            'payload': updated_data,
+            'user_id': user_id
+        }
+    )
     return DataResponse[Simulation](data=updated.data, message='Simulation re-initiated successfully')

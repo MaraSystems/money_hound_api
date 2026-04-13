@@ -3,7 +3,7 @@ from pymongo.database import Database
 import pytest
 
 from src.domains.auth.delete_profile import delete_profile
-from src.domains.auth.model import CreateUser
+from src.models.auth import CreateUser
 from src.models.role import CreateRole
 from tests.fixture_spec import TestFixture
 

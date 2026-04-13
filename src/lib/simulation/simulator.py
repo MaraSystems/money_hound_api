@@ -13,7 +13,7 @@ from src.lib.analytics.anomalizer import check_unusual
 from src.lib.simulation import banking, clock
 from src.lib.simulation.individual import Individual
 from src.lib.simulation.events import Events
-from src.lib.simulation.generator import generate_amount
+from src.lib.simulation.generator import random_amount
 from src.lib.simulation.generator import fake
 
 
@@ -22,12 +22,30 @@ class Simulator:
         Simulate the banking system.
     """
 
-    def __init__(self):
+    def __init__(
+            self, 
+            num_users: int,
+            num_banks: int,
+            min_amount = 100,
+            max_amount = 5_000_000,
+            geo=(9.3, 3.9),
+            radius=50_000,
+            fraudulence = .05
+    ):
         """
             Initialize a banking system
 
             @param min_amount: The minimum amount to transact
+            @param num_users: The number of users
+            @param bank_names: The names of banks
         """
+        self.geo = geo
+        self.radius = radius
+        self.min_amount = min_amount
+        self.max_amount = max_amount
+        self.fraudulence = fraudulence
+        self.num_users = num_users
+        self.num_banks = num_banks
 
 
     async def generate_locations(self, count=1000):
@@ -85,24 +103,15 @@ class Simulator:
             self.banks[name] = bank
 
 
-    async def setup_reality(self, num_users: int, num_banks: int, min_amount = 100, max_amount = 5_000_000, geo=(9.3, 3.9), radius=50_000, fraudulence = .05):
+    async def setup_reality(self):
         """
             Sets the reality for the simulation
-            
-            @param num_users: The number of users
-            @param bank_names: The names of banks
         """
-
-        self.geo = geo
-        self.radius = radius
-        self.min_amount = min_amount
-        self.max_amount = max_amount
-        self.fraudulence = fraudulence
-
         await self.generate_locations()
-        await self.setup_individuals(num_users)
-        await self.setup_banks(num_banks)
+        await self.setup_individuals(self.num_users)
+        await self.setup_banks(self.num_banks)
         self.events = Events(banks=self.banks, individuals=self.individuals, locations=self.locations)
+        
         
 
     async def run_event(self):
@@ -121,7 +130,7 @@ class Simulator:
         limit = spend_limit if spend_limit > self.min_amount else balance 
         limit = spend_limit if spend_limit < self.max_amount else self.max_amount
         
-        amount = generate_amount(level=account['kyc'], limit=limit)
+        amount = random_amount(level=account['kyc'], limit=limit)
 
         # Generate transaction reference
         reference = str(uuid4())

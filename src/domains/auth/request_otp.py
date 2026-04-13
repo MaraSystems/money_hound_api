@@ -4,11 +4,11 @@ from fastapi import HTTPException, status
 from pymongo.database import Database
 from redis.asyncio import Redis
 
+from src.lib.task.run_task import run_task
 from src.lib.utils.lazycache import lazyload
-
-from ...domains.auth.model import RequestOTP
-from ...lib.utils.response import DataResponse
-from ...tasks.mailer import send_mail
+from src.models.auth import RequestOTP
+from src.lib.utils.response import DataResponse
+from src.tasks.send_mail import send_mail_task
 
 
 async def request_otp(payload: RequestOTP, db: Database, cache: Redis):
@@ -21,5 +21,13 @@ async def request_otp(payload: RequestOTP, db: Database, cache: Redis):
     code = ''.join(choices(string.digits, k=6))
     await cache.setex(f'OTP:{payload.email}', 300, code)
 
-    send_mail.delay('Your OTP Code', payload.email, {'code': code}, 'otp_email.html')
+    run_task(
+        send_mail_task,
+        kwargs={
+            'subject': 'Your OTP Code',
+            'email': payload.email,
+            'data': {'code': code},
+            'template_file': 'otp_email.html'
+        }
+    )
     return DataResponse(message='OTP sent successfully')

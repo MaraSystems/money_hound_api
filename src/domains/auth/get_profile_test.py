@@ -2,7 +2,6 @@ from httpx import AsyncClient
 from pymongo.database import Database
 import pytest
 
-from src.models.user import User
 from tests.fixture_spec import TestFixture
 
 

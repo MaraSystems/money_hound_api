@@ -3,7 +3,6 @@ from faker.providers import profile, bank
 import numpy as np
 import pandas as pd
 import random
-import math
 
 from src.lib.analytics import tracker
 
@@ -13,7 +12,7 @@ fake.add_provider(profile)
 fake.add_provider(bank)
 
 
-def generate_amount(level=1, limit=0):
+def random_amount(level=1, limit=0):
     """
         Generate a random amount.
 

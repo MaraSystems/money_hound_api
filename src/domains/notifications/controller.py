@@ -5,7 +5,7 @@ from fastapi.routing import APIRouter
 
 from src.db.cache import get_cache
 from src.db.database import get_db
-from src.domains.auth.model import CurrentUser
+from src.models.auth import CurrentUser
 from src.domains.notifications.create_notification import create_notification
 from src.domains.notifications.get_notification import get_notification
 from src.domains.notifications.list_notifications import list_notification

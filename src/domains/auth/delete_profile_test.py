@@ -2,7 +2,6 @@ from httpx import AsyncClient
 from motor.motor_asyncio import AsyncIOMotorDatabase
 import pytest
 
-from src.models.user import User
 from tests.fixture_spec import TestFixture
 
 

@@ -4,9 +4,9 @@ from fastapi import HTTPException, status
 from pymongo.database import Database
 from redis.asyncio import Redis
 
-from src.domains.auth.model import CurrentUser
 from src.lib.utils.lazycache import lazyload
-from ...lib.utils import config
+from src.models.auth import CurrentUser
+from src.lib.utils import config
 
 
 async def validate_token(token: str, db: Database, cache: Redis) -> CurrentUser:

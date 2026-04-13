@@ -5,7 +5,7 @@ from collections import defaultdict
 import asyncio
 
 from src.lib.simulation.generator import random_location
-from src.lib.simulation.generator import generate_amount
+from src.lib.simulation.generator import random_amount
 from src.lib.simulation.clock import global_clock
 from src.models.simulation_devices import CreateSimulationDevice, DeviceType
 
@@ -80,7 +80,7 @@ class Bank:
         )
 
         # Set a random amount as the opening amount based on the account's kyc level
-        opening_balance = generate_amount(kyc)
+        opening_balance = random_amount(kyc)
 
         # Select a random device for the user
         device = random.choice(user['devices'])

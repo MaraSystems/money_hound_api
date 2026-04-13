@@ -5,7 +5,7 @@ from fastapi import Depends, Query
 from fastapi.routing import APIRouter
 from pymongo.database import Database
 
-from src.domains.auth.model import CurrentUser
+from src.models.auth import CurrentUser
 from src.domains.simulation_devices.get_simulation_device import get_simulation_device
 from src.domains.simulation_devices.list_simulation_devices import list_simulation_devices
 from src.models.simulation_devices import ListSimulationDevices, SimulationDevice

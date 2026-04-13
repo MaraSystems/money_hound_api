@@ -9,13 +9,13 @@ from .request_otp import request_otp
 from .verify_otp import verify_otp
 from .update_profile import update_profile
 from .delete_profile import delete_profile
-from ...models.user import User
-from ...middlewares.auth_guard import get_current_user
-from .model import CreateUser, RequestOTP, VerifyOTP, Token, UpdateProfile
-from ...db.database import get_db
-from ...lib.utils.response import DataResponse
-from ...lib.utils.config import REQUEST_LIMIT
-from ...middlewares.limits import rate_limit
+from src.models.user import User
+from src.middlewares.auth_guard import get_current_user
+from src.models.auth import CreateUser, RequestOTP, VerifyOTP, Token, UpdateProfile
+from src.db.database import get_db
+from src.lib.utils.response import DataResponse
+from src.lib.utils.config import REQUEST_LIMIT
+from src.middlewares.limits import rate_limit
 
 
 auth_router = APIRouter(prefix='/auth')

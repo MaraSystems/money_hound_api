@@ -2,7 +2,7 @@ from typing import Callable, List
 from fastapi import Depends, HTTPException, status
 
 from src.db.database import get_db
-from src.domains.auth.model import CurrentUser
+from src.models.auth import CurrentUser
 from src.middlewares.auth_guard import get_current_user
 
 

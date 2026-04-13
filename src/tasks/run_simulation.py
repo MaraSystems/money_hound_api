@@ -17,15 +17,15 @@ from src.models.user import User
 from src.lib.simulation.simulator import Simulator
 from src.lib.utils.lazycache import lazyload
 from src.lib.utils.logger import get_logger
-from src.tasks.mailer import send_mail
+from src.tasks.send_mail import send_mail_task
 from src.lib.utils.config import ENV, ENVIRONMENTS
+from src.tasks.send_mail import send_mail_task
+from src.lib.task.run_task import run_task
 
 
 async def run_simulation(payload: Simulation, user_id: str, db: Database, cache: Redis):
     period = 60 * 60 * 24
-    sim = Simulator()
-
-    await sim.setup_reality(
+    sim = Simulator(
         num_users=payload.get('min_num_user', 5),
         num_banks=payload.get('num_banks', 5),
         min_amount=payload.get('min_amount', None),
@@ -35,11 +35,8 @@ async def run_simulation(payload: Simulation, user_id: str, db: Database, cache:
         fraudulence=payload.get('fraudulence', None)
     )
 
-    await sim.simulate(
-        period,
-        payload['days']
-    )
-    
+    await sim.setup_reality()
+    await sim.simulate(period, payload['days'])
     await save_simulation(payload, user_id, sim, db, cache)
 
 
@@ -84,23 +81,26 @@ async def save_simulation(payload: Simulation, user_id: str, sim: Simulator, db:
     simulation_accounts_collection = db.simulation_accounts
     await simulation_accounts_collection.insert_many(accounts)
 
-    send_mail.delay(
-        'Simulation Complete',
-        user_details['email'], 
-        {
-            'user_name': user_details['firstname'],
-            'num_banks': payload['num_banks'],
-            'timestamp': payload['created_at']
-        }, 
-        'simulation_complete.html', 
-        sim.datasets
+    run_task(
+        send_mail_task,
+        kwargs={
+            'subject': 'Simulation Complete',
+            'email': user_details['email'],
+            'data': {
+                'user_name': user_details['firstname'],
+                'num_banks': payload['num_banks'],
+                'timestamp': payload['created_at']
+            },
+            'template_file': 'simulation_complete.html',
+            'attatchments': sim.datasets
+        }
     )
 
     logger.info(f"Simulation Saved")
 
 
-@celery_app.task
-def simulator(payload: Simulation, user_id: str):
+@celery_app.task(name='run_simulation_task')
+def run_simulation_task(payload: Simulation, user_id: str):
     if ENV == ENVIRONMENTS.TESTING:
         return
 

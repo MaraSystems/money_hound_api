@@ -27,6 +27,7 @@ def parse_data_url(self, url: str) -> Optional[str]:
         return None
     return match.group("mime")
 
+
 def upload(self, data: bytes, path: str, prefix: str, ext: str) -> str:
     """Upload binary data to the specified path.
 
@@ -49,6 +50,7 @@ def upload(self, data: bytes, path: str, prefix: str, ext: str) -> str:
         f.write(data)
 
     return filepath
+
 
 def binary_to_text(self, data: bytes, name: str, mime_type: Optional[str] = None) -> str:
     """Convert binary file content to text representation.
@@ -103,6 +105,7 @@ def binary_to_text(self, data: bytes, name: str, mime_type: Optional[str] = None
     except Exception as e:
         return f"[Error parsing {name}: {e}]"
 
+
 async def validate_upload(self, upload: UploadDocument) -> str:
     """Validate an uploaded document.
 
@@ -137,6 +140,7 @@ async def validate_upload(self, upload: UploadDocument) -> str:
 
     return ext
 
+
 def validate_image(self, content: bytes):
     """Validate that binary content is a valid image file.
 
@@ -152,6 +156,7 @@ def validate_image(self, content: bytes):
     except UnidentifiedImageError:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail='Invalid image file')
 
+
 def validate_pdf(self, content: bytes):
     """Validate that binary content is a valid PDF with extractable text.
 
@@ -165,6 +170,7 @@ def validate_pdf(self, content: bytes):
     text = "\n\n".join(page.extract_text() or "" for page in pdf_reader.pages).strip()
     if text == '':
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail='Invalid pdf file')
+
 
 async def upload_document(self, upload: UploadDocument, path: str = '', prefix: str = '') -> tuple:
     """Validate and upload a document.
@@ -180,13 +186,13 @@ async def upload_document(self, upload: UploadDocument, path: str = '', prefix: 
     Returns:
         Tuple of (filepath, content_type)
     """
-    ext = await self.validate_upload(upload)
+    ext = await validate_upload(upload)
 
     if upload.content_type.startswith('image/'):
-        self.validate_image(upload.content)
+        validate_image(upload.content)
 
     if upload.content_type == 'application/pdf':
-        self.validate_pdf(upload.content)
+        validate_pdf(upload.content)
 
-    filepath = self.upload(upload.content, path, prefix, ext)
+    filepath = upload(upload.content, path, prefix, ext)
     return filepath, upload.content_type

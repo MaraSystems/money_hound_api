@@ -4,12 +4,12 @@ from pymongo.database import Database
 import pytest
 from redis import Redis
 
-from src.domains.auth.model import CreateUser, TokenData
+from src.models.auth import CreateUser, TokenData
 from src.models.notification import CreateNotification
 from src.models.role import CreateRole
 from src.domains.auth.create_token import create_token
 from src.domains.simulations.model import CreateSimulation
-from src.tasks.simulations import run_simulation
+from src.tasks.run_simulation import run_simulation
 
 
 class TestFixture:
