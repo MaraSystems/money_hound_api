@@ -8,7 +8,7 @@ from src.models.auth import CreateUser, TokenData
 from src.models.notification import CreateNotification
 from src.models.role import CreateRole
 from src.domains.auth.create_token import create_token
-from src.domains.simulations.model import CreateSimulation
+from src.models.simulation import CreateSimulation
 from src.tasks.run_simulation import run_simulation
 
 

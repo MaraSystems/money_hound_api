@@ -10,12 +10,12 @@ from src.domains.simulations.analyze_simulation import analyze_simulation
 from src.domains.simulations.delete_simulation import delete_simulation
 from src.domains.simulations.get_simulation import get_simulation
 from src.domains.simulations.list_simulations import list_simulations
-from src.domains.simulations.model import CreateSimulation, Simulation, ListSimulations, UpdateSimulation
+from src.models.simulation import CreateSimulation, Simulation, ListSimulations, UpdateSimulation
 from src.domains.simulations.create_simulation import create_simulation
 from src.db.cache import get_cache
 from src.db.database import get_db
 from src.domains.simulations.update_simulation import update_simulation
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse, PageResponse
 from src.middlewares.auth_guard import get_current_user
 
 
@@ -50,14 +50,14 @@ async def get(
 
 @simulations_router.get(
     '',
-    response_model=DataResponse[List[Simulation]],
+    response_model=PageResponse[Simulation],
     name="List Simulations"
 )
 async def fetch_list(
     payload: Annotated[Query, Depends(ListSimulations)],
     user: CurrentUser = Depends(get_current_user),
     db=Depends(get_db)
-) -> DataResponse[List[Simulation]]:
+) -> PageResponse[Simulation]:
     return await list_simulations(payload, db)
 
 

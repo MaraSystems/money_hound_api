@@ -3,9 +3,9 @@ from typing import Any
 
 from pymongo.database import Database
 
-from src.domains.simulations.model import CreateSimulation, Simulation
+from src.models.simulation import CreateSimulation, Simulation
 from src.lib.task.run_task import run_task
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 from src.tasks.run_simulation import run_simulation_task
 
 

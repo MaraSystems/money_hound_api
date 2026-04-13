@@ -11,7 +11,7 @@ from src.domains.notifications.get_notification import get_notification
 from src.domains.notifications.list_notifications import list_notification
 from src.models.notification import CreateNotification, ListNotifications, Notification
 from src.domains.notifications.read_notification import read_notification
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse, PageResponse
 from src.middlewares.auth_guard import get_current_user
 from src.middlewares.role_guard import require_permission
 
@@ -35,14 +35,14 @@ async def create(
 
 @notification_router.get(
     '',
-    response_model=DataResponse[List[Notification]],
+    response_model=PageResponse[Notification],
     name="List Notifications"
 )
 async def fetch(
     payload: Annotated[Query, Depends(ListNotifications)],
     db=Depends(get_db),
     user: CurrentUser =Depends(get_current_user)
-) -> DataResponse[List[Notification]]:
+) -> PageResponse[Notification]:
     return await list_notification(payload, user.id, db)
 
 

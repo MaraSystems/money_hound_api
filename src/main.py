@@ -5,7 +5,7 @@ from fastapi.openapi.utils import get_openapi
 
 from .middlewares.error_handler import http_exception_handler, response_exception_handler, system_exception_handler, validation_exception_handler
 from .middlewares.requests_logger import RequestLoggingMiddleware
-from .lib.utils.response import DataResponse
+from .models.response import DataResponse
 from .router import register_routes
 from .lib.utils import config
 from .lib.utils.logger import get_logger

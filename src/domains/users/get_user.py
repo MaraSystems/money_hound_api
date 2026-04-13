@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from redis.asyncio import Redis
 
 from src.lib.utils.lazycache import lazyload
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 async def get_user(id: ObjectId, db: Database, cache: Redis):
     user_collection = db.users

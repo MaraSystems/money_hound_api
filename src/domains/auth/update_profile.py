@@ -5,7 +5,7 @@ from redis.asyncio import Redis
 
 from src.domains.auth.get_profile import get_profile
 from src.models.auth import UpdateProfile
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def update_profile(id: ObjectId, payload: UpdateProfile, db: Database, cache: Redis):

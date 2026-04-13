@@ -3,11 +3,12 @@ from typing import Literal, Optional
 from pydantic import BaseModel, Field, computed_field
 
 from src.lib.utils.base_entity import BaseEntity
-from src.lib.utils.pagination import Page
+from src.models.pagination import Page
+from src.models.entity import Creator, Update
 
 SimulationStatus = Literal['PENDING', 'COMPLETE', 'FAILED']
 
-class CreateSimulation(BaseModel):
+class CreateSimulation(Creator):
     num_banks: int = Field(..., description="The number of banks")
     min_num_user: int = Field(..., description="The min number of users")
     latitude: float = Field(..., description="The latitude of the simulation")
@@ -23,21 +24,7 @@ class CreateSimulation(BaseModel):
     @property
     def status(self) -> SimulationStatus:
         return 'PENDING'
-
-    @computed_field
-    @property
-    def created_at(self) -> datetime:
-        return datetime.now()
     
-    @computed_field
-    @property
-    def updated_at(self) -> datetime:
-        return datetime.now()
-
-    @computed_field
-    @property
-    def hidden(self) -> bool:
-        return False
 
 class Simulation(BaseEntity):
     num_banks: int = Field(..., description="The number of banks")
@@ -52,11 +39,12 @@ class Simulation(BaseEntity):
     status: SimulationStatus = Field(..., description="The status of the simulation")
     days: float = Field(..., description="The number of days to simulate")
 
+
 class ListSimulations(Page):
     author_id: Optional[str] = Field(None, description="Unique identifier of the author who created the simulation")
 
 
-class UpdateSimulation(BaseModel):
+class UpdateSimulation(Update):
     num_banks: Optional[int] = Field(None, description="The number of banks")
     min_num_user: Optional[int] = Field(None, description="The min number of users")
     fraudulence: Optional[float] = Field(None, description="The percentage of fraudulence")
@@ -66,10 +54,4 @@ class UpdateSimulation(BaseModel):
     min_amount: Optional[float] = Field(None, description="The min amount to be generated")
     max_amount: Optional[float] = Field(None, description="The maximium amount to be generated")
     days: Optional[float] = Field(None, description="The number of days to simulate")
-
-    @computed_field
-    @property
-    def updated_at(self) -> datetime:
-        return datetime.now()
-
-    ...
+    

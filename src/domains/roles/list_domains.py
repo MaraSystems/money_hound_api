@@ -1,7 +1,7 @@
 from typing import List
 
 from src.models.role import Domain
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def list_domains():

@@ -4,7 +4,7 @@ from redis.asyncio import Redis
 
 from src.models.role import CreateRole, Role
 from src.lib.utils.lazycache import lazyload
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def create_role(payload: CreateRole, author_id: str, db: Database, cache: Redis) -> DataResponse[Role]:

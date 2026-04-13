@@ -3,7 +3,7 @@ from typing import Annotated
 from datetime import datetime
 
 from src.lib.utils.base_entity import BaseEntity
-from ..lib.utils.pagination import Page
+from .pagination import Page
 
 
 class User(BaseEntity):

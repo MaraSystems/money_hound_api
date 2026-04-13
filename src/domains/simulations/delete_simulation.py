@@ -9,7 +9,7 @@ from redis.asyncio import Redis
 from src.domains.roles.get_role import get_role
 from src.domains.simulations.get_simulation import get_simulation
 
-from ...lib.utils.response import DataResponse
+from ...models.response import DataResponse
 
 
 async def delete_simulation(id: ObjectId, user_id: str, db: Database, cache: Redis):

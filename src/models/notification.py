@@ -4,10 +4,11 @@ from fastapi import HTTPException, status
 from pydantic import BaseModel, Field, computed_field, field_validator
 
 from src.lib.utils.base_entity import BaseEntity
-from src.lib.utils.pagination import Page
+from src.models.pagination import Page
+from src.models.entity import Creator
 
 
-class CreateNotification(BaseModel):
+class CreateNotification(Creator):
     subject: str = Field(description="Subject of the notification")
     message: str = Field(description="Message of the role")
     category: Literal['info', 'warning', 'alert', 'system', 'message']
@@ -26,18 +27,6 @@ class CreateNotification(BaseModel):
             raise HTTPException(status.HTTP_400_BAD_REQUEST, detail=f'Notification must expire in the future: {value}')
 
         return value
-
-
-    @computed_field
-    @property
-    def created_at(self) -> datetime:
-        return datetime.now()
-    
-
-    @computed_field
-    @property
-    def updated_at(self) -> datetime:
-        return datetime.now()
 
 
     @computed_field

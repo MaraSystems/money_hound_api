@@ -14,7 +14,7 @@ from src.models.simulation_profile import CreateSimulationProfile, ListSimulatio
 from src.db.cache import get_cache
 from src.db.database import get_db
 from src.models.simulation_transaction import TransactionsAnalysis
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse, PageResponse
 from src.middlewares.auth_guard import get_current_user
 
 
@@ -50,14 +50,14 @@ async def get(
 
 @simulation_profiles_router.get(
     '',
-    response_model=DataResponse[List[SimulationProfile]],
+    response_model=PageResponse[SimulationProfile],
     name="List Simulation Profiles"
 )
 async def fetch_list(
     payload: Annotated[Query, Depends(ListSimulationProfiles)],
     user: CurrentUser = Depends(get_current_user),
     db=Depends(get_db)
-) -> DataResponse[List[SimulationProfile]]:
+) -> PageResponse[SimulationProfile]:
     return await list_simulation_profiles(payload, db)
 
 

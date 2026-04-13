@@ -5,7 +5,7 @@ from redis.asyncio import Redis
 
 from src.domains.roles.get_role import get_role
 
-from ...lib.utils.response import DataResponse
+from ...models.response import DataResponse
 from ..users.get_user import get_user
 
 

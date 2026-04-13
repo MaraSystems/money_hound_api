@@ -3,9 +3,9 @@ from pymongo.database import Database
 from bson import ObjectId
 from redis.asyncio import Redis
 
-from src.domains.simulations.model import Simulation
+from src.models.simulation import Simulation
 from src.lib.utils.lazycache import lazyload
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def get_simulation(id: ObjectId, db: Database, cache: Redis):

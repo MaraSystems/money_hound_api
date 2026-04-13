@@ -10,7 +10,7 @@ from redis.asyncio import Redis
 from src.domains.simulation_transactions.analyze_transaction_history import analyze_transaction_history
 from src.models.simulation_transaction import TransactionsAnalysis
 from src.domains.simulations.get_simulation import get_simulation
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def analyze_simulation(id: ObjectId, db: Database, cache: Redis):

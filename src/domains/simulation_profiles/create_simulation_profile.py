@@ -4,7 +4,7 @@ from fastapi import HTTPException, status
 
 from src.models.simulation_profile import CreateSimulationProfile, SimulationProfile
 from src.lib.utils.lazycache import lazyload
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def create_simulation_profile(payload: CreateSimulationProfile, db: Database, cache: Redis) -> DataResponse[SimulationProfile]:

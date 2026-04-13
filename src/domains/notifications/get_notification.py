@@ -5,7 +5,7 @@ from redis.asyncio import Redis
 
 from src.models.notification import Notification
 from src.lib.utils.lazycache import lazyload
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def get_notification(id: ObjectId, db: Database, cache: Redis, user_id: str = None) -> DataResponse[Notification]:

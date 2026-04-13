@@ -4,10 +4,11 @@ from uuid import uuid4
 from pydantic import BaseModel, Field, computed_field
 
 from src.lib.utils.base_entity import BaseEntity
-from src.lib.utils.pagination import Page
+from src.models.pagination import Page
+from src.models.entity import Creator
 
 
-class CreateSimulationProfile(BaseModel):
+class CreateSimulationProfile(Creator):
     user_id: str = Field(default_factory=lambda: f"USER_{str(uuid4())}", description="The id of the user")
     name: str = Field(..., description="The name of the user")
     gender: str = Field(..., description="The gender of the user")
@@ -17,16 +18,6 @@ class CreateSimulationProfile(BaseModel):
     latitude: float = Field(..., description="The latitude of the user location")
     longitude: float = Field(..., description="The longitude of the user location")
     simulation_id: str = Field(..., description="The id of the simulation")
-
-    @computed_field
-    @property
-    def created_at(self) -> datetime:
-        return datetime.now()
-    
-    @computed_field
-    @property
-    def updated_at(self) -> datetime:
-        return datetime.now()
 
 
 class SimulationProfile(BaseEntity):

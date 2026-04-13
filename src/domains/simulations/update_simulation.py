@@ -4,9 +4,9 @@ from pymongo.database import Database
 from redis.asyncio import Redis
 
 from src.domains.simulations.get_simulation import get_simulation
-from src.domains.simulations.model import Simulation, UpdateSimulation
+from src.models.simulation import Simulation, UpdateSimulation
 from src.lib.task.run_task import run_task
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 from src.tasks.run_simulation import run_simulation_task
 
 

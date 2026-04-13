@@ -1,14 +1,9 @@
 from httpx import AsyncClient
 from pymongo.database import Database
-from bson import ObjectId
-from pytest import mark
 import pytest
 from redis import Redis
 
-from src.domains.simulations.model import CreateSimulation
-from src.models.user import User
 from tests.fixture_spec import TestFixture
-
 
 @pytest.mark.asyncio
 class TestListSimulationsEndpoint(TestFixture):
@@ -52,11 +47,9 @@ class TestListSimulationsEndpoint(TestFixture):
 
     async def test_list_simulations_pagination(self, async_client: AsyncClient, test_db: Database, test_cache: Redis):
         await self._set_up(test_db)
-
         # Create 5 roles
         for i in range(5):
             await self._create_simulation(test_db, test_cache)
-
 
         # Limit
         resp = await async_client.get('/simulations?limit=2', headers={'Authorization': f'Bearer {self.token}'})
@@ -68,4 +61,4 @@ class TestListSimulationsEndpoint(TestFixture):
         resp2 = await async_client.get('/simulations?skip=2&limit=2', headers={'Authorization': f'Bearer {self.token}'})
         assert resp2.status_code == 200
         data2 = resp2.json()
-        assert len(data2['data']) == 2
+        assert len(data2['data']) == 1

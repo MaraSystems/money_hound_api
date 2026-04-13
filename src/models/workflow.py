@@ -1,10 +1,54 @@
-from typing_extensions import Optional
+from typing_extensions import Literal, Optional
 from uuid import uuid4
 
 from langgraph.graph import StateGraph
 from pydantic import BaseModel, Field, computed_field
 
 from src.lib.utils.logger import get_logger
+from src.models.document import UploadDocument
+from src.models.entity import Creator, Entity
+
+ChatRole = Literal['user', 'assistant']
+
+class CreateChat(Creator):
+    """Model for creating a new chat message.
+
+    Attributes:
+        content: User's query or message content
+        session_id: Unique identifier for the chat session
+        role: Message role (user or assistant)
+        document: Optional uploaded document attached to the message
+        reasoning: Reasoning level for the response (0-1)
+    """
+    content: str = Field(..., description="User query")
+    session_id: str = Field(str(uuid4()), description='The session id')
+    role: ChatRole = Field('user')
+    document: Optional[UploadDocument] = Field(None, description='The base64 uploaded document')
+    reasoning: Optional[float] = Field(0, description='The reasoning level required')
+
+
+class Conversation(BaseModel):
+    """Model for storing conversation history.
+
+    Attributes:
+        query: User's question or message
+        reply: Assistant's response
+    """
+    query: str = Field(..., description="User query")
+    reply: str = Field(..., description="Bot reply")
+
+
+class Chat(Entity):
+    """Model for individual chat messages stored in database.
+
+    Attributes:
+        content: Message content
+        session_id: Session identifier
+        role: Message role (user or assistant)
+    """
+    content: str = Field(...)
+    session_id: str = Field(...)
+    role: ChatRole
 
 
 class WorkflowSettings(BaseModel):

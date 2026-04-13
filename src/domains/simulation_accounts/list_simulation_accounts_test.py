@@ -1,12 +1,8 @@
 from httpx import AsyncClient
 from pymongo.database import Database
-from bson import ObjectId
-from pytest import mark
 import pytest
 from redis import Redis
 
-from src.domains.simulations.model import CreateSimulation
-from src.models.user import User
 from tests.fixture_spec import TestFixture
 
 

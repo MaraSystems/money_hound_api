@@ -14,7 +14,7 @@ from src.models.simulation_account import CreateSimulationAccount, ListSimulatio
 from src.db.cache import get_cache
 from src.db.database import get_db
 from src.models.simulation_transaction import TransactionsAnalysis
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse, PageResponse
 from src.middlewares.auth_guard import get_current_user
 
 
@@ -50,14 +50,14 @@ async def get(
 
 @simulation_accounts_router.get(
     '',
-    response_model=DataResponse[List[SimulationAccount]],
+    response_model=PageResponse[SimulationAccount],
     name="List Simulation accounts"
 )
 async def fetch_list(
     payload: Annotated[Query, Depends(ListSimulationAccounts)],
     user: CurrentUser = Depends(get_current_user),
     db=Depends(get_db)
-) -> DataResponse[List[SimulationAccount]]:
+) -> PageResponse[SimulationAccount]:
     return await list_simulation_accounts(payload, db)
 
 

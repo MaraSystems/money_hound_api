@@ -6,7 +6,7 @@ from redis.asyncio import Redis
 from src.domains.roles.get_role import get_role
 from src.models.role import Role, UpdateRole
 from src.models.user import User
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def update_role(id: ObjectId, payload: UpdateRole, db: Database, cache: Redis) -> DataResponse[Role]:

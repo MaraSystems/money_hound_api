@@ -6,7 +6,7 @@ from redis.asyncio import Redis
 from src.domains.simulation_transactions.hound_transaction import hound_transaction
 from src.models.simulation_transaction import AnalyzedSimulationTransaction, SimulationTransaction
 from src.lib.utils.lazycache import lazyload
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def get_simulation_transaction(id: ObjectId, db: Database, cache: Redis):

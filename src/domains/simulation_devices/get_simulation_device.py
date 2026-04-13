@@ -5,7 +5,7 @@ from redis.asyncio import Redis
 
 from src.models.simulation_devices import SimulationDevice
 from src.lib.utils.lazycache import lazyload
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def get_simulation_device(id: ObjectId, db: Database, cache: Redis):

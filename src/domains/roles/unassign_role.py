@@ -6,7 +6,7 @@ from redis.asyncio import Redis
 from src.domains.roles.get_role import get_role
 from src.domains.users.get_user import get_user
 
-from ...lib.utils.response import DataResponse
+from ...models.response import DataResponse
 
 
 async def unassign_role(id: ObjectId, user_id: ObjectId, db: Database, cache: Redis):

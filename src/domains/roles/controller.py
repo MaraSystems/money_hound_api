@@ -18,7 +18,7 @@ from .unassign_role import unassign_role
 from .assign_role import assign_role
 
 from ...models.role import CreateRole, Domain, ListRoles, Role, UpdateRole
-from ...lib.utils.response import DataResponse
+from ...models.response import DataResponse, PageResponse
 from ...middlewares.auth_guard import get_current_user
 
 role_router = APIRouter(prefix='/roles')
@@ -26,12 +26,12 @@ role_router = APIRouter(prefix='/roles')
 
 @role_router.get(
     '/domains', 
-    response_model=DataResponse[List[Domain]], 
+    response_model=PageResponse[Domain], 
     name="List Role Domains"
 )
 async def fetch_domains(
     permissons=Depends(require_permission('roles:domains:read'))
-) -> DataResponse[List[Domain]]: 
+) -> PageResponse[Domain]: 
     return await list_domains()
 
 
@@ -81,14 +81,14 @@ async def update(
 
 @role_router.get(
     '',
-    response_model=DataResponse[List[Role]],
+    response_model=PageResponse[Role],
     name="List Roles"
 )
 async def list_roles(
     payload: Annotated[Query, Depends(ListRoles)],
     db=Depends(get_db),
     permissons=Depends(require_permission('roles:base:read'))
-) -> DataResponse[List[Role]]:
+) -> PageResponse[Role]:
     return await fetch_roles(payload, db)
 
 

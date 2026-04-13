@@ -11,7 +11,7 @@ from src.domains.simulation_devices.list_simulation_devices import list_simulati
 from src.models.simulation_devices import ListSimulationDevices, SimulationDevice
 from src.db.cache import get_cache
 from src.db.database import get_db
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse, PageResponse
 from src.middlewares.auth_guard import get_current_user
 
 
@@ -46,12 +46,12 @@ async def get(
 
 @simulation_devices_router.get(
     '',
-    response_model=DataResponse[List[SimulationDevice]],
+    response_model=PageResponse[SimulationDevice],
     name="List Simulation Devices"
 )
 async def fetch_list(
     payload: Annotated[Query, Depends(ListSimulationDevices)],
     user: CurrentUser = Depends(get_current_user),
     db=Depends(get_db)
-) -> DataResponse[List[SimulationDevice]]:
+) -> PageResponse[SimulationDevice]:
     return await list_simulation_devices(payload, db)

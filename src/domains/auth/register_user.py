@@ -8,7 +8,7 @@ from src.lib.utils.lazycache import lazyload
 
 from src.models.auth import CreateUser
 from src.models.user import User
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 from src.tasks.send_mail import send_mail_task
 
 

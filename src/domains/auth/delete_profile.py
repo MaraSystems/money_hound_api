@@ -3,7 +3,7 @@ from pymongo.database import Database
 from redis.asyncio import Redis
 
 from src.domains.auth.get_profile import get_profile
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def delete_profile(user_id: ObjectId, db: Database, cache: Redis):

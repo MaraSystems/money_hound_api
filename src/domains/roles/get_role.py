@@ -5,7 +5,7 @@ from redis.asyncio import Redis
 
 from src.models.role import Role
 from src.lib.utils.lazycache import lazyload
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def get_role(id: ObjectId, db: Database, cache: Redis):

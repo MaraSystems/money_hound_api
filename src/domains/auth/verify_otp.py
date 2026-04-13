@@ -3,7 +3,7 @@ from redis.asyncio import Redis
 
 from src.domains.auth.create_token import create_token
 from src.models.auth import Token, TokenData, VerifyOTP
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def verify_otp(payload: VerifyOTP, cache: Redis):

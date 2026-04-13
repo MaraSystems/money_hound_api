@@ -6,41 +6,20 @@ from typing import Annotated, List, Optional
 from pymongo.database import Database
 
 from src.db.database import get_db
+from src.models.entity import Creator, Update
 from src.models.role import Role
 
 
-class CreateUser(BaseModel):
+class CreateUser(Creator):
     email: EmailStr = Field(..., description="Email address of the user")
     firstname: Annotated[str, Field(min_length=3, description="First name of the user")]
     lastname: Annotated[str, Field(min_length=3, description="Last name of the user")]
-
-    @computed_field
-    @property
-    def created_at(self) -> datetime:
-        return datetime.now()
-
-
-    @computed_field
-    @property
-    def updated_at(self) -> datetime:
-        return datetime.now()
-
-
-    @computed_field
-    @property
-    def hidden(self) -> bool:
-        return False
     
 
-class UpdateProfile(BaseModel):
+class UpdateProfile(Update):
     email: Optional[EmailStr] = Field(None, description="Email address of the user")
     firstname: Optional[str] = Field(None, min_length=3, description="First name of the user")
     lastname: Optional[str] = Field(None, min_length=3, description="Last name of the user")
-
-    @computed_field
-    @property
-    def updated_at(self) -> datetime:
-        return datetime.now()
 
 
 class TokenData(BaseModel):
@@ -63,7 +42,6 @@ class VerifyOTP(RequestOTP):
 class CurrentUser(BaseModel):
     id: str = Field(..., description="Unique identifier for the user")
     email: EmailStr = Field(..., description="Email address of the user")
-
 
     async def get_permissions(self, db: Database) -> List[str]:
         roles = await db.roles.find({'users': self.id}).to_list()

@@ -76,7 +76,7 @@ class TestListNotificationEndpoint(TestFixture):
         notifications = response.json()['data']
         assert len(notifications) == 2
 
-        response = await async_client.get(f"/notifications?limit=2&skip=4", headers={'Authorization': f'Bearer {self.token}'})
+        response = await async_client.get(f"/notifications?limit=2&skip=2", headers={'Authorization': f'Bearer {self.token}'})
         notifications = response.json()['data']
         assert len(notifications) == 1
 

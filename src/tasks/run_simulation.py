@@ -11,7 +11,7 @@ from src.tasks.queue import celery_app
 from src.models.simulation_account import CreateSimulationAccount
 from src.models.simulation_devices import CreateSimulationDevice
 from src.models.simulation_profile import CreateSimulationProfile
-from src.domains.simulations.model import Simulation
+from src.models.simulation import Simulation
 from src.models.simulation_transaction import CreateSimulationTransaction
 from src.models.user import User
 from src.lib.simulation.simulator import Simulator

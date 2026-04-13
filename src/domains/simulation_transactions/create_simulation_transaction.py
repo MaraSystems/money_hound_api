@@ -6,7 +6,7 @@ from src.models.simulation_account import SimulationAccount
 from src.models.simulation_transaction import InitiateSimulationTransaction, AnalyzedSimulationTransaction
 from src.domains.simulation_transactions.transact import credit_account, debit_account
 from src.lib.utils.lazycache import lazyload
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def create_simulation_transaction(payload: InitiateSimulationTransaction, db: Database, cache: Redis) -> DataResponse[AnalyzedSimulationTransaction]:

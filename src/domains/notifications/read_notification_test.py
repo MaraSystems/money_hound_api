@@ -7,7 +7,7 @@ from bson import ObjectId
 from src.domains.notifications.create_notification import create_notification
 from src.models.notification import CreateNotification
 from src.domains.notifications.notify_user import notify_user
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 from tests.fixture_spec import TestFixture
 
 

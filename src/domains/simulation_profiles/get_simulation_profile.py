@@ -5,7 +5,7 @@ from redis.asyncio import Redis
 
 from src.models.simulation_profile import SimulationProfile
 from src.lib.utils.lazycache import lazyload
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def get_simulation_profile(id: ObjectId, db: Database, cache: Redis):

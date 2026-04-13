@@ -12,7 +12,7 @@ from src.domains.simulation_transactions.list_simulation_transactions import lis
 from src.models.simulation_transaction import AnalyzedSimulationTransaction, ListSimulationTransactions, SimulationTransaction, InitiateSimulationTransaction
 from src.db.cache import get_cache
 from src.db.database import get_db
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse, PageResponse
 from src.middlewares.auth_guard import get_current_user
 
 
@@ -48,12 +48,12 @@ async def get(
 
 @simulation_transactions_router.get(
     '',
-    response_model=DataResponse[List[SimulationTransaction]],
+    response_model=PageResponse[SimulationTransaction],
     name="List Simulation Transactions"
 )
 async def fetch_list(
     payload: Annotated[Query, Depends(ListSimulationTransactions)],
     user: CurrentUser = Depends(get_current_user),
     db=Depends(get_db)
-) -> DataResponse[List[SimulationTransaction]]:
+) -> PageResponse[SimulationTransaction]:
     return await list_simulation_transactions(payload, db)

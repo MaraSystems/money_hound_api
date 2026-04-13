@@ -7,7 +7,7 @@ from redis.asyncio import Redis
 from src.lib.task.run_task import run_task
 from src.lib.utils.lazycache import lazyload
 from src.models.auth import RequestOTP
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 from src.tasks.send_mail import send_mail_task
 
 

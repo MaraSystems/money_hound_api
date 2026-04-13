@@ -6,7 +6,7 @@ from redis.asyncio import Redis
 from src.lib.utils.lazycache import lazyload
 
 from src.models.user import User
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def get_profile(user_id: ObjectId, db: Database, cache: Redis):

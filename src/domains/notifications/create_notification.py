@@ -1,7 +1,7 @@
 from pymongo.database import Database
 
 from src.models.notification import CreateNotification
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def create_notification(payload: CreateNotification, db: Database):

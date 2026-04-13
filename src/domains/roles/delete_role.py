@@ -4,7 +4,7 @@ from redis.asyncio import Redis
 
 from src.domains.roles.get_role import get_role
 
-from ...lib.utils.response import DataResponse
+from ...models.response import DataResponse
 
 
 async def delete_role(id: ObjectId, db: Database, cache: Redis):

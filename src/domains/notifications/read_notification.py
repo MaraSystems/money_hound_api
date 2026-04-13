@@ -5,7 +5,7 @@ from redis.asyncio import Redis
 
 from src.domains.notifications.get_notification import get_notification
 from src.domains.users.get_user import get_user
-from src.lib.utils.response import DataResponse
+from src.models.response import DataResponse
 
 
 async def read_notification(id: ObjectId, user_id: str, db: Database, cache: Redis):
