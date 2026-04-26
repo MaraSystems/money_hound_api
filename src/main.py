@@ -1,7 +1,11 @@
+import asyncio
 from fastapi import FastAPI, HTTPException
 from contextlib import asynccontextmanager
 from fastapi.exceptions import RequestValidationError, ResponseValidationError
 from fastapi.openapi.utils import get_openapi
+from src.lib.task.execute_messages import execute_messages
+from src.lib.task.message_queue import msg_queue
+from src.lib.task.publish_message import publish_message
 
 from .middlewares.error_handler import http_exception_handler, response_exception_handler, system_exception_handler, validation_exception_handler
 from .middlewares.requests_logger import RequestLoggingMiddleware
@@ -12,11 +16,12 @@ from .lib.utils.logger import get_logger
 
 logger = get_logger('app')
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info('🚀 Application starting...')
 
+    await execute_messages()
+    
     yield
     logger.info("👋 Application shutting down...")
 

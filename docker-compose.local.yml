@@ -18,6 +18,8 @@ services:
       retries: 5
     volumes:
       - mongo_data:/data/db
+    networks:
+      - moneyhound_network
 
   redis:
     image: redis:7.2.4-alpine
@@ -33,50 +35,32 @@ services:
       retries: 5
     volumes:
       - redis_data:/data
+    networks:
+      - moneyhound_network
 
-  queue:
-    container_name: queue
-    build: .
-    env_file:
-      - .env
-    environment:
-      MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
-      REDIS_URL: redis://redis:6379
-    command: celery -A src.config.queue worker --loglevel=warning
-    volumes:
-      - ./src:/app/src
-    depends_on:
-      - redis
-
-  schedule:
-    container_name: schedule
-    build: .
-    env_file:
-      - .env
-    environment:
-      MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
-      REDIS_URL: redis://redis:6379
-    command: celery -A src.config.queue beat --loglevel=warning
-    volumes:
-      - ./src:/app/src
-    depends_on:
-      - queue
-
-  flower:
-    container_name: flower
-    build: .
-    env_file:
-      - .env
-    environment:
-      MONGO_URL: mongodb://root:example@mongodb:27017?retryWrites=true&w=majority
-      REDIS_URL: redis://redis:6379
-    command: celery -A src.config.queue worker --port=5555 --loglevel=warning
+  rabbit:
+    image: rabbitmq:3-management
+    container_name: rabbit
     ports:
-      - 5556:5555
-    depends_on:
-      - schedule
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbit_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    networks:
+      - moneyhound_network
 
 volumes:
   mongo_data:
   redis_data:
+  rabbit_data:
   api_data:
+
+networks:
+  moneyhound_network:
+    driver: bridge

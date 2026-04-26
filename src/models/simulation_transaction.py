@@ -2,9 +2,8 @@ from datetime import datetime
 from typing import Literal, Optional
 from pydantic import BaseModel, Field, computed_field
 
-from src.lib.utils.base_entity import BaseEntity
 from src.models.pagination import Page
-from src.models.entity import Creator
+from src.models.entity import Creator, Entity
 
 
 TransactionCategory = Literal['OPENING', 'WITHDRAWAL', 'DEPOSIT', 'REVERSAL', 'PAYMENT', 'BILL', 'TRANSFER', 'LOAN']
@@ -37,7 +36,7 @@ class CreateSimulationTransaction(InitiateSimulationTransaction, Creator):
     reported: bool = Field(..., description="The report status of the transaction")
 
 
-class SimulationTransaction(BaseEntity):
+class SimulationTransaction(Entity):
     amount: float = Field(..., description="The amount of the transaction")
     balance: float = Field(..., description="The balance of the transaction")
     time: datetime = Field(..., description="The time of the transaction")

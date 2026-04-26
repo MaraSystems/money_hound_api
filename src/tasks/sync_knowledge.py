@@ -1,11 +1,9 @@
 import asyncio
 
 from src.lib.utils.config import GOOGLE_FOLDER_ID
-from src.tasks.queue import celery_app
 from src.lib.store.knowledge_manager import KnowledgeManager
 
 
-@celery_app.task(name='sync_knowledge_task')
 def sync_knowledge_task():
     """Sync company documents from Google Drive to the vector store.
 

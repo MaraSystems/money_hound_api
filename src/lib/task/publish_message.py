@@ -1,12 +1,12 @@
-from src.lib.utils.config import ENV, ENVIRONMENTS, EXTERNAL_BACKGROUND
+from src.lib.task.message_queue import msg_queue
+from src.lib.utils.config import ENV, ENVIRONMENTS, EXTERNAL_BACKGROUND, RABBIT_URL
 from src.lib.utils.logger import get_logger
 from src.lib.task.task_manager import task_manager
-from src.tasks.queue import celery_app
 
 logger = get_logger('TaskRunner')
 
 
-def run_task(task: callable, kwargs: dict = {}):
+async def publish_message(task: callable, payload: dict = {}):
     """Execute a background task using TaskManager or Celery based on configuration.
 
     In testing environment, tasks are skipped. When EXTERNAL_BACKGROUND is disabled,
@@ -14,18 +14,22 @@ def run_task(task: callable, kwargs: dict = {}):
 
     Args:
         task: Callable task function to execute
-        kwargs: Arguments to pass to the task
+        payload: Arguments to pass to the task
 
     Returns:
         Celery task result if using Celery, None otherwise
     """
     if ENV == ENVIRONMENTS.TESTING:
-        return None
+        return
 
     if not EXTERNAL_BACKGROUND:
         logger.info(f'Running task {task.__name__} in TaskManager')
-        task_manager.add_task(task, **kwargs)
-        return None
+        task_manager.add_task(task, payload)
+        return
 
-    logger.info(f'Running task {task.__name__} in celery')
-    return celery_app.send_task(task.__name__, kwargs=kwargs)
+    logger.info(f'Running task {task.__name__} in MessageQueue')
+    await msg_queue.connect()
+    await msg_queue.publish(task.__name__, payload)
+    return
+
+

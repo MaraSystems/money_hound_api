@@ -7,10 +7,9 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from pandas import DataFrame
 from langchain_core.documents import Document
 
-from src.lib.store.google_drive import GoogleDrive, download, list_documents
+from src.lib.store.google_drive import download, list_documents
 from src.lib.utils.config import VECTOR_DIR
 from src.lib.utils.logger import get_logger
-from src.workflows.llms import get_embedding
 
 
 class KnowledgeManager:

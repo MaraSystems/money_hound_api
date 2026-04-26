@@ -8,7 +8,6 @@ import os
 
 from src.lib.utils.config import MAIL_USER, MAIL_PASSWORD, APP_NAME, ENV, ENVIRONMENTS
 from src.lib.utils.logger import get_logger
-from src.tasks.queue import celery_app
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -16,7 +15,6 @@ template_dir = os.path.join(BASE_DIR, 'templates')
 env = Environment(loader=FileSystemLoader(template_dir))
 
 
-@celery_app.task(name='send_mail_task')
 def send_mail_task(subject: str, email: str, data: dict, template_file: str, attachments: list = [], clear: bool = True):
     """Send an email with HTML content and optional attachments.
 

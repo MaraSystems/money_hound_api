@@ -37,6 +37,7 @@ ALGORITHM = os.getenv('ALGORITHM', 'HS256')
 # Database connections
 MONGO_URL = os.getenv('MONGO_URL')
 REDIS_URL = os.getenv('REDIS_URL')
+RABBIT_URL = os.getenv('RABBIT_URL')
 
 # Email configuration
 DEFAULT_EMAIL = os.getenv('DEFAULT_EMAIL')

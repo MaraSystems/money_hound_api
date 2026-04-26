@@ -1,11 +1,11 @@
 from datetime import datetime
 from typing import List
 from uuid import uuid4
-from pydantic import BaseModel, Field, computed_field
 
-from src.lib.utils.base_entity import BaseEntity
+from pydantic import Field
+
 from src.models.pagination import Page
-from src.models.entity import Creator
+from src.models.entity import Creator, Entity
 
 
 class CreateSimulationProfile(Creator):
@@ -20,7 +20,7 @@ class CreateSimulationProfile(Creator):
     simulation_id: str = Field(..., description="The id of the simulation")
 
 
-class SimulationProfile(BaseEntity):
+class SimulationProfile(Entity):
     user_id: str = Field(..., description="The id of the user")
     name: str = Field(..., description="The name of the user")
     gender: str = Field(..., description="The gender of the user")

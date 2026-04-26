@@ -1,11 +1,8 @@
-from datetime import datetime
-from typing import List
 from uuid import uuid4
-from pydantic import BaseModel, Field, computed_field
+from pydantic import Field
 
-from src.lib.utils.base_entity import BaseEntity
 from src.models.pagination import Page
-from src.models.entity import Creator
+from src.models.entity import Creator, Entity
 
 
 class CreateSimulationAccount(Creator):
@@ -20,7 +17,7 @@ class CreateSimulationAccount(Creator):
     simulation_id: str = Field(..., description="The id of the simulation")
 
 
-class SimulationAccount(BaseEntity):
+class SimulationAccount(Entity):
     account_no: str = Field(..., description="The account no of the account")
     account_name: str = Field(..., description="The account name of the account")
     bank_name: str = Field(..., description="The bank_name of the account")

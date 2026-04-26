@@ -7,7 +7,6 @@ from bson import ObjectId
 from src.db.cache import get_cache
 from src.lib.utils.config import UPLOAD_PATH
 from src.db.database import get_db
-from src.tasks.queue import celery_app
 from src.models.simulation_account import CreateSimulationAccount
 from src.models.simulation_devices import CreateSimulationDevice
 from src.models.simulation_profile import CreateSimulationProfile
@@ -20,7 +19,7 @@ from src.lib.utils.logger import get_logger
 from src.tasks.send_mail import send_mail_task
 from src.lib.utils.config import ENV, ENVIRONMENTS
 from src.tasks.send_mail import send_mail_task
-from src.lib.task.run_task import run_task
+from src.lib.task.publish_message import publish_message
 
 
 async def run_simulation(payload: Simulation, user_id: str, db: Database, cache: Redis):
@@ -81,9 +80,9 @@ async def save_simulation(payload: Simulation, user_id: str, sim: Simulator, db:
     simulation_accounts_collection = db.simulation_accounts
     await simulation_accounts_collection.insert_many(accounts)
 
-    run_task(
+    await publish_message(
         send_mail_task,
-        kwargs={
+        payload={
             'subject': 'Simulation Complete',
             'email': user_details['email'],
             'data': {
@@ -99,7 +98,6 @@ async def save_simulation(payload: Simulation, user_id: str, sim: Simulator, db:
     logger.info(f"Simulation Saved")
 
 
-@celery_app.task(name='run_simulation_task')
 def run_simulation_task(payload: Simulation, user_id: str):
     if ENV == ENVIRONMENTS.TESTING:
         return

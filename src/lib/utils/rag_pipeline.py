@@ -4,7 +4,7 @@ from uuid import uuid4
 from pymongo.database import Database
 from datetime import datetime
 
-from ..store.google_drive import GoogleDrive
+from src.lib.store.google_drive import list_documents
 from src.lib.utils.config import MONGO_VECTOR_COLLECTION
 from src.workflows.vector_store import get_vector_store
 from src.lib.utils.logger import get_logger
@@ -30,11 +30,11 @@ class RAGPipeline():
         return len(ids)
     
 
-    async def list_outdated_knowledge(self, folder_id: str, db: Database, drive: GoogleDrive):
+    async def list_outdated_knowledge(self, folder_id: str, db: Database):
         knowledge_collection = db.knowledge
         vector_collection = db[MONGO_VECTOR_COLLECTION]
 
-        docs = drive.list_documents(folder_id)
+        docs = list_documents(folder_id)
         document_list = []
 
         for doc in docs:

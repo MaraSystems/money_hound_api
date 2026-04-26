@@ -9,12 +9,12 @@ class Task:
     Attributes:
         name: Name of the task function
         coro: The coroutine or executor task
-        kwargs: Arguments passed to the task
+        payload: Arguments passed to the task
     """
 
     name: str
     coro: asyncio.Task
-    kwargs: dict
+    payload: dict
 
 
 class TaskManager:
@@ -28,23 +28,23 @@ class TaskManager:
         """Initialize the task manager with an empty task list."""
         self.tasks = []
 
-    def add_task(self, func: callable, **kwargs) -> asyncio.Task:
+    def add_task(self, func: callable, payload) -> asyncio.Task:
         """Add a task to the manager and start it immediately.
 
         Args:
             func: Callable function to execute (async or sync)
-            **kwargs: Arguments to pass to the function
+            **payload: Arguments to pass to the function
 
         Returns:
             The created asyncio.Task instance
         """
         if asyncio.iscoroutinefunction(func):
-            task = asyncio.create_task(func(**kwargs))
+            task = asyncio.create_task(func(**payload))
         else:
             loop = asyncio.get_event_loop()
-            task = loop.run_in_executor(None, lambda: func(**kwargs))
+            task = loop.run_in_executor(None, lambda: func(**payload))
 
-        self.tasks.append(Task(name=func.__name__, coro=func, kwargs=kwargs))
+        self.tasks.append(Task(name=func.__name__, coro=func, payload=payload))
         return task
 
     async def wait_all(self):

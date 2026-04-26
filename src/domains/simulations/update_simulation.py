@@ -5,7 +5,7 @@ from redis.asyncio import Redis
 
 from src.domains.simulations.get_simulation import get_simulation
 from src.models.simulation import Simulation, UpdateSimulation
-from src.lib.task.run_task import run_task
+from src.lib.task.publish_message import publish_message
 from src.models.response import DataResponse
 from src.tasks.run_simulation import run_simulation_task
 
@@ -24,9 +24,9 @@ async def update_simulation(id: ObjectId, payload: UpdateSimulation, user_id: st
     updated = await get_simulation(id, db, cache)
     updated_data = updated.data.model_dump(exclude=['id'])
     updated_data['_id'] = updated.data.id
-    run_task(
+    await publish_message(
         run_simulation_task,
-        kwargs={
+        payload={
             'payload': updated_data,
             'user_id': user_id
         }

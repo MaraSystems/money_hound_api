@@ -4,7 +4,7 @@ from typing import Any
 from pymongo.database import Database
 
 from src.models.simulation import CreateSimulation, Simulation
-from src.lib.task.run_task import run_task
+from src.lib.task.publish_message import publish_message
 from src.models.response import DataResponse
 from src.tasks.run_simulation import run_simulation_task
 
@@ -15,9 +15,9 @@ async def create_simulation(payload: CreateSimulation, user_id: str, db: Databas
     simulation = await simulation_collection.find_one({'_id': insert.inserted_id})
 
     simulation['_id'] = str(simulation['_id'])
-    run_task(
+    await publish_message(
         run_simulation_task,
-        kwargs={
+        payload={
             'payload': simulation,
             'user_id': user_id
         }

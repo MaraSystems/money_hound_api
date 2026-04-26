@@ -2,7 +2,7 @@ from pymongo.database import Database
 from fastapi import HTTPException, status
 from redis.asyncio import Redis
 
-from src.lib.task.run_task import run_task
+from src.lib.task.publish_message import publish_message
 from src.lib.utils.config import APP_NAME
 from src.lib.utils.lazycache import lazyload
 
@@ -23,9 +23,9 @@ async def register_user(payload: CreateUser, db: Database, cache: Redis):
     user = await user_collection.find_one({'_id': insert.inserted_id})
 
     mail_data = {'user_name': user.get('firstname'), 'verification_link': '#'}
-    run_task(
+    await publish_message(
         send_mail_task,
-        kwargs={
+        payload={
             'subject': f'Welcome to {APP_NAME}',
             'email': user.get('email'),
             'data': mail_data,
