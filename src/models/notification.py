@@ -1,11 +1,10 @@
 from datetime import datetime
-from typing import Annotated, Literal, Optional, List, Dict
+from typing_extensions import Annotated, Literal, Optional, List, Dict
 from fastapi import HTTPException, status
-from pydantic import BaseModel, Field, computed_field, field_validator
+from pydantic import Field, computed_field, field_validator
 
-from src.lib.utils.base_entity import BaseEntity
 from src.models.pagination import Page
-from src.models.entity import Creator
+from src.models.entity import Creator, Entity
 
 
 class CreateNotification(Creator):
@@ -41,7 +40,7 @@ class CreateNotification(Creator):
         return []
 
 
-class Notification(BaseEntity):
+class Notification(Entity):
     subject: str = Field(description="Subject of the notification")
     message: str = Field(description="Message of the role")
     category: Literal['info', 'warning', 'alert', 'system', 'message']

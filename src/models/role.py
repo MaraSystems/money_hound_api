@@ -2,9 +2,8 @@ from datetime import datetime
 from pydantic import BaseModel, Field, computed_field
 from typing import List, Optional
 
-from src.lib.utils.base_entity import BaseEntity
 from src.models.pagination import Page
-from src.models.entity import Creator, Update
+from src.models.entity import Creator, Update, Entity
 
 
 class CreateRole(Creator):
@@ -47,7 +46,7 @@ class ListRoles(Page):
     user_id: Optional[str] = Field(None, description="Id of the user the roles belong to")
 
 
-class Role(BaseEntity):
+class Role(Entity):
     title: str = Field(..., description="Title of the role")
     description: Optional[str] = Field(None, description="Description of the role")
     permissions: List[str] = Field(..., description="List of permissions associated with the role")

@@ -1,12 +1,11 @@
 from pydantic import EmailStr, Field
-from typing import Annotated
-from datetime import datetime
+from typing_extensions import Annotated
 
-from src.lib.utils.base_entity import BaseEntity
-from .pagination import Page
+from src.models.entity import Entity
+from src.models.pagination import Page
 
 
-class User(BaseEntity):
+class User(Entity):
     email: EmailStr = Field(..., description="Email address of the user")
     firstname: str = Field(..., description="First name of the user")
     lastname: str = Field(..., description="Last name of the user")

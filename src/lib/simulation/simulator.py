@@ -111,8 +111,7 @@ class Simulator:
         await self.setup_individuals(self.num_users)
         await self.setup_banks(self.num_banks)
         self.events = Events(banks=self.banks, individuals=self.individuals, locations=self.locations)
-        
-        
+            
 
     async def run_event(self):
         """
@@ -272,8 +271,3 @@ class Simulator:
         df = extractor.extract_rolling_averages(df)
 
         return check_unusual(df)
-
-
-def get_simulator():
-    simulator = Simulator()
-    return simulator

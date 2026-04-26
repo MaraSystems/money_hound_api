@@ -1,10 +1,8 @@
-from datetime import datetime
 from typing_extensions import Literal, Optional
-from pydantic import BaseModel, Field, computed_field
+from pydantic import Field
 
-from src.lib.utils.base_entity import BaseEntity
 from src.models.pagination import Page
-from src.models.entity import Creator
+from src.models.entity import Creator, Entity
 
 
 DeviceType = Literal["ATM", "MOBILE"]
@@ -18,7 +16,7 @@ class CreateSimulationDevice(Creator):
     simulation_id: Optional[str] = Field(None, description="The id of the simulation")
 
 
-class SimulationDevice(BaseEntity):
+class SimulationDevice(Entity):
     device_id: str = Field(..., description="The id of the device")
     owner: str = Field(..., description="The owner of the device")
     type: DeviceType = Field(..., description="The type of the device")

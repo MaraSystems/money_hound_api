@@ -1,10 +1,8 @@
-from datetime import datetime
-from typing import Literal, Optional
-from pydantic import BaseModel, Field, computed_field
+from typing_extensions import Literal, Optional
+from pydantic import Field, computed_field
 
-from src.lib.utils.base_entity import BaseEntity
 from src.models.pagination import Page
-from src.models.entity import Creator, Update
+from src.models.entity import Creator, Update, Entity
 
 SimulationStatus = Literal['PENDING', 'COMPLETE', 'FAILED']
 
@@ -26,7 +24,7 @@ class CreateSimulation(Creator):
         return 'PENDING'
     
 
-class Simulation(BaseEntity):
+class Simulation(Entity):
     num_banks: int = Field(..., description="The number of banks")
     min_num_user: int = Field(..., description="The min number of users")
     fraudulence: float = Field(..., description="The percentage of fraudulence")
